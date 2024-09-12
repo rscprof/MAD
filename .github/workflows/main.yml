@@ -25,7 +25,13 @@ jobs:
         with:
           root_file: problems.tex
           compiler: pdflatex
-      - uses: actions/upload-artifact@v4
+      - name: create directory
+        shell: bash
+        run: mkdir dist && mkdir dist/${{ steps.extract_branch.outputs.branch }} && cp problems.pdf dist/${{ steps.extract_branch.outputs.branch }}
+      - name: Publish generated content to GitHub Pages
+        uses: tsunematsu21/actions-publish-gh-pages@v1.0.2
         with:
-          name: ${{ steps.extract_branch.outputs.branch }}
-          path: problems.pdf
+          dir: dist
+          branch: pages
+          token: ${{ secrets.ACCESS_TOKEN }}
+          
