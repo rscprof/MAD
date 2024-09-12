@@ -1,0 +1,31 @@
+name: Build LaTeX document
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: problems.tex
+          compiler: pdflatex
+      - name: Compile LaTeX document #2
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: problems.tex
+          compiler: pdflatex
+      - name: Compile LaTeX document #3
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: problems.tex
+          compiler: pdflatex
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.extract_branch.outputs.branch }}
+          path: problems.pdf
