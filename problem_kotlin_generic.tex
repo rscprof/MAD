@@ -1,4 +1,4 @@
-\subsection{Практическая работа <<Абстрактное программирование в Kotlin>>}
+\subsection{Семинар <<Абстрактное программирование в Kotlin>>}
 % TODO усложнить, подумать об in- и out- параметрах, а также where
 
 \textbf{Задание №1}
@@ -81,52 +81,5 @@
 %		при каждом вызове последовательно возвращает $f(x)$, $f(f(x))$, $f(f(f(x)))$, $\dots$.
 
 
-
-
-
-
-
-	
 \end{enumerate}
-
-\textbf{Задание №2}
-
-
-Обозначим $n$ -- номер варианта.
-
-Функция добавления элемента в список выбирается учащимся исходя из значения \verb|n % 4+1|
-
-\begin{enumerate}
-\item \verb|fun push (el: T): Bool|
-вставляет элемент в начало списка;
-\item \verb|fun add (el: T): Bool|
-вставляет элемент в конец списка;
-\item \verb|fun insert (el: T,n: Int): Bool|
-вставляет элемент на позицию n (нумерация идет с единицы) с начала списка;
-\item \verb|fun insert (els:Array<T>,count: Int,n: Int): Bool|
-вставляет count элементов массива els начиная с позиции n
-\end{enumerate}
-
-Процедура удаления элемента из списка выбирается учащимся исходя из значения \verb|n/4%4+1|:
-
-\begin{enumerate}
-	\item \verb|fun delete(): Bool| удаляет элемент из начала списка
-	\item \verb|fun delete(): Bool| удаляет элемент с конца списка
-	\item \verb|fun delete (n: Int): Bool| удаляет элемент с позиции n
-	\item \verb|fun delete (count: Int,n: Int): Bool| удаляет count элементов начиная с позиции n
-\end{enumerate}
-
-Процедура печати элементов списка выбирается учащимся исходя из значения \verb|n mod 5+1|:
-
-\begin{enumerate}
-	\item \verb|fun print():Unit| печатает все элементы
-\item \verb|fun print():Unit| печатает первый элемент списка
-\item \verb|fun print():Unit| печатает последний элемент списка
-\item \verb|fun print(n: Int): Unit| печатает элемент списка, имеющий позицию n
-\item \verb|fun print(count: Int,n: Int): Unit| печатает count элементов списка, начиная с позиции n
-\end{enumerate}
-
-Кроме того должна быть реализована функция eraseAll, которая очищает весь список.
-
-Список должен быть реализован в виде generic-класса.
 

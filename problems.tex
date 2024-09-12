@@ -10,13 +10,11 @@
 	\vspace*{\fill}
 	\centering 
 
-	\Large Сборник практических и лабораторных работ по \\
-	междисциплинарному курсу \\
-	<<МДК.01.03 Разработка мобильных приложений>>\\
+	\Large Сборник заданий для семинарских занятий \\
+	по курсу \\
+	<<Разработка мобильных приложений>>\\
 	\large
 	\vspace{40pt}
-	Специальность: 09.02.07 Информационные системы и программирование\\
-	Квалификация: программист
 	\vspace*{\fill}
 	\newpage
 }
@@ -25,11 +23,9 @@
 \newpage
 \section{Общие сведения}
 
-Сборник содержит задания для практических и лабораторных работ для студентов, 
-обучающихся специальности 09.02.07 Информационные системы и программирование
-(квалификация <<программист>>). 
+Сборник содержит задания для семинарских занятий по курсу <<Разработка мобильных приложений>>. 
 
-Задачник расчитан на 72 часа практических занятий и 6 часов лабораторных работ.
+Задачник расчитан на 48 часов семинарских занятий.
 
 Структурно курс делится на две части:
 
@@ -37,10 +33,6 @@
 	\item изучение языка Kotlin,\\
 	\item изучение разработки на платформе Android.
 \end{enumerate}
-
-Изучение курса базируется на том, что основы программирования, объектно-ориентированное программирование и современные 
-подходы к его применению изучены в предыдущих дисциплинах. Соответственно, работы предназначены для освоения новых
-навыков, в частности функционального подхода к программированию.
 
 В практических и лабораторных работах предполагается использование языка Kotlin в средах
 IntelliJ IDEA и Android Studio. При этом необходимо соблюдать 
@@ -60,62 +52,55 @@ IntelliJ IDEA и Android Studio. При этом необходимо соблю
 \section{Язык Kotlin}
 
 \include{problem_kotlin_start.tex}
+\include{problem_kotlin_when.tex}
+\include{problems_kotlin_array.tex}
+\include{problem_kotlin_string.tex}
+
 \include{problem_kotlin_functions.tex}
 \include{problem_kotlin_functional_programming.tex}
-\include{problem_regular_expressions.tex}
+
 \include{problem_kotlin_oop.tex}
-\include{problem_kotlin_dagger.tex}
+\include{problem_kotlin_operators_overloading.tex}
+\include{problem_kotlin_delegate.tex}
 \include{problem_kotlin_generic.tex}
+
+
+
+%\include{problem_kotlin_dagger.tex}
+
+\section{Разработка на языке Kotlin для платформы Android}
+
 \include{lab_android_first.tex}
 \include{problem_android_first.tex}
-\include{problem_android_first_compose.tex}
-\include{problem_android_autotest.tex}
-\include{problem_android_mvvm.tex}
-\include{problem_android_lazylist.tex}
-\include{problem_android_DI.tex}
+%\include{problem_android_first_compose.tex}
 \include{problem_android_background.tex}
-\include{problem_android_photo.tex}
-\include{lab_android_sensors.tex}
-\include{problem_android_sensors.tex}
-\include{problem_android_animation.tex}
+
+
+%\include{problem_android_lazylist.tex}
+%\include{problem_android_photo.tex}
+%\include{lab_android_sensors.tex}
+%\include{problem_android_sensors.tex}
+%\include{problem_android_animation.tex}
+%\include{lab_android_profile.tex}
+%\include{problem_android_optimize.tex}
+
+\include{problem_android_room.tex}
+
+
 \include{problem_android_rest.tex}
-\include{lab_android_profile.tex}
-\include{problem_android_optimize.tex}
-
-\subsection{Последнее занятие}
-
-Последнее занятие предназначено для сдачи работ, которые не были приняты заранее. На каждого студента выделяется равное время, поэтому сдать все работы в
-последний день не удастся.
-
-%\subsection{Практическая работа №11. Intent (4 часа)}
-%
-%\begin{enumerate}
-%	\item Для практической работы №8 реализуйте возможность отправить результат вычисления в другое приложение по выбору пользователя.
-%	\item Для практической работы №9 добавьте в хранящиеся данные фотографию. Получение фотографии реализуйте с помощью Intent, обращающегося
-%		к другому приложению.
-%\end{enumerate}
-
-%\subsection{Практическая работа №12. Хранение данных между сеансами работы (2 часа)}
-
-%Обеспечьте сохранение информации между сеансами работы для практической работы №7 с использованием ROOM: 
-%при принудительном завершении программы при повторном запуске
-%должны восстанавливаться введенные данные и activity (или режим его работы), что был активен до завершения программы. Реализация данной функциональности
-%производится с учетом объективных ограничений, накладываемых платформой. Номер варианта в данной работе совпадает с номером варианта в работе №7.
-
-%\subsection{Практическая работа №15. MVP (2 часа)}
-%
-%Осуществите рефакторинг результата 8-ой практической работы с учетом модификации в 11-ой практической работе, реализовав архитектуру MVP.
 
 
+\include{problem_android_autotest.tex}
 
 
-% \subsection{Зачётное задание}
-%
-%Зачётное задание выполняется во время пары целиком. Реализация 
-%программы, которая выполняет основную функцию (возможно, с некритическими 
-%ошибками) необходима для получения зачёта.
-%
-%Задания совпадают с заданиями работы №13 (но необходимо выполнить только один тип запроса и не нужно реализовывать автоматическое тестирование).
+\include{problem_android_mvvm.tex}
+\include{problem_android_repository.tex}
+\include{problem_android_DI.tex}
+
+\subsection{Последний семинар}
+
+Последнее занятие предназначено для подведения итогов, осуществления review кода последнего проекта, который, в идеале, включает корректное использование паттерна
+MVVM, репозитория и Dependency Injection в проекте, использующем Rest API и кеширование результатов на стороне клиента.
 
 \section{Список литературы}
 
