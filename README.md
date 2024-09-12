@@ -1,4 +1,4 @@
-# RMP_ISP
+# MAD
 Problems for Android-development course (on Russian)
 
 The problembook has: 
