@@ -1,0 +1,23 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{calc}
+\usepackage{hyperref}
+\usepackage[margin=0.5cm]{geometry}
+\usepackage{fancyhdr}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Define a new page style with empty headers and footers
+\fancypagestyle{empty}{
+  \fancyhf{} % Clear all headers and footers
+  \renewcommand{\headrulewidth}{0pt} % Remove the header rule
+  \renewcommand{\footrulewidth}{0pt} % Remove the footer rule
+}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\begin{document}
+\include{25/task.tex}
+\end{document}
