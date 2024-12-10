@@ -8,163 +8,164 @@ import (
 	"strconv"
 )
 
-type Product struct {
-	ID        string  `json:"id"`
-	Name      string  `json:"name"`
-	Price     float64 `json:"price"`
-	ShelfLife int     `json:"shelf_life"`
-	IsOrganic bool    `json:"is_organic"`
+// Route represents a bus route.
+type Route struct {
+	ID            string  `json:"id"`
+	Name          string  `json:"name"`
+	Length        float64 `json:"length"` // Length in kilometers
+	NumberOfStops int     `json:"number_of_stops"`
 }
 
-var products = []Product{
-	{"1", "Яблоко", 120.5, 30, true},
-	{"2", "Груша", 110.75, 25, false},
-	{"3", "Банан", 50.3, 7, true},
-	{"4", "Апельсин", 90.25, 15, false},
-	{"5", "Персик", 150.0, 20, true},
-	{"6", "Киви", 160.0, 10, true},
-	{"7", "Вишня", 200.0, 15, false},
-	{"8", "Гранат", 250.0, 30, true},
-	{"9", "Арбуз", 60.0, 5, false},
-	{"10", "Малина", 180.0, 7, true},
-	{"11", "Клубника", 250.0, 10, false},
-	{"12", "Черешня", 220.0, 12, true},
-	{"13", "Черника", 210.0, 14, false},
-	{"14", "Ежевика", 300.0, 18, true},
-	{"15", "Мандарин", 120.0, 30, false},
-	{"16", "Лимон", 70.0, 20, true},
-	{"17", "Болгарский перец", 80.0, 10, false},
-	{"18", "Помидор", 60.0, 7, true},
-	{"19", "Огурец", 40.0, 5, false},
-	{"20", "Картофель", 30.0, 60, true},
-	{"21", "Морковь", 40.0, 40, false},
-	{"22", "Свекла", 50.0, 50, true},
-	{"23", "Лук", 30.0, 90, false},
-	{"24", "Чеснок", 60.0, 180, true},
-	{"25", "Брокколи", 100.0, 7, false},
-	{"26", "Цветная капуста", 120.0, 10, true},
-	{"27", "Шпинат", 90.0, 5, false},
-	{"28", "Руккола", 150.0, 5, true},
-	{"29", "Кукуруза", 80.0, 50, false},
-	{"30", "Горошек", 70.0, 30, true},
-	{"31", "Кабачок", 60.0, 20, false},
-	{"32", "Тыква", 110.0, 60, true},
-	{"33", "Ананас", 200.0, 15, false},
-	{"34", "Манго", 300.0, 20, true},
-	{"35", "Кокос", 350.0, 60, false},
-	{"36", "Арбуз", 80.0, 7, true},
-	{"37", "Болгарский перец", 75.0, 10, false},
-	{"38", "Капуста", 40.0, 60, true},
-	{"39", "Редис", 30.0, 7, false},
-	{"40", "Петрушка", 20.0, 14, true},
-	{"41", "Укроп", 25.0, 10, false},
-	{"42", "Мята", 50.0, 5, true},
-	{"43", "Сельдерей", 90.0, 15, false},
-	{"44", "Огурец", 45.0, 6, true},
-	{"45", "Помидоры", 55.0, 12, false},
-	{"46", "Перец чили", 80.0, 30, true},
-	{"47", "Шампиньоны", 150.0, 7, false},
-	{"48", "Лисички", 200.0, 5, true},
-	{"49", "Боровики", 250.0, 6, false},
-	{"50", "Маслята", 170.0, 8, true},
-	{"51", "Трюфели", 1000.0, 1, false},
-	{"52", "Сморчки", 400.0, 3, true},
-	{"53", "Сливки", 200.0, 7, false},
-	{"54", "Молоко", 60.0, 14, true},
-	{"55", "Сыр", 300.0, 20, false},
-	{"56", "Творог", 120.0, 10, true},
-	{"57", "Яйца", 50.0, 30, false},
-	{"58", "Кефир", 80.0, 14, true},
-	{"59", "Крем-сыр", 180.0, 15, false},
-	{"60", "Йогурт", 90.0, 20, true},
-	{"61", "Масло сливочное", 150.0, 60, false},
-	{"62", "Майонез", 80.0, 90, true},
-	{"63", "Гречка", 50.0, 365, false},
-	{"64", "Рис", 60.0, 180, true},
-	{"65", "Пшено", 40.0, 360, false},
-	{"66", "Макароны", 30.0, 365, true},
-	{"67", "Киноа", 200.0, 180, false},
-	{"68", "Чечевица", 100.0, 365, true},
-	{"69", "Фасоль", 120.0, 365, false},
-	{"70", "Кускус", 150.0, 180, true},
-	{"71", "Манка", 40.0, 365, false},
-	{"72", "Перловка", 30.0, 360, true},
-	{"73", "Ячмень", 50.0, 360, false},
-	{"74", "Овсянка", 45.0, 365, true},
-	{"75", "Сахар", 60.0, 365, false},
-	{"76", "Соль", 20.0, 730, true},
-	{"77", "Перец черный", 70.0, 180, false},
-	{"78", "Чесночный порошок", 90.0, 365, true},
-	{"79", "Тмин", 100.0, 180, false},
-	{"80", "Корица", 120.0, 365, true},
-	{"81", "Лавровый лист", 60.0, 180, false},
-	{"82", "Гвоздика", 150.0, 365, true},
-	{"83", "Карри", 80.0, 180, false},
-	{"84", "Имбирь", 90.0, 180, true},
-	{"85", "Куркума", 70.0, 180, false},
-	{"86", "Саус", 100.0, 30, true},
-	{"87", "Кетчуп", 90.0, 90, false},
-	{"88", "Масло оливковое", 350.0, 730, true},
-	{"89", "Масло растительное", 120.0, 365, false},
-	{"90", "Соевый соус", 180.0, 180, true},
-	{"91", "Кокосовое масло", 500.0, 730, false},
-	{"92", "Горчица", 70.0, 180, true},
-	{"93", "Песто", 150.0, 30, false},
-	{"94", "Томатная паста", 80.0, 180, true},
-	{"95", "Соус барбекю", 100.0, 180, false},
-	{"96", "Вино красное", 700.0, 730, true},
-	{"97", "Вино белое", 600.0, 730, false},
-	{"98", "Пиво", 120.0, 180, true},
-	{"99", "Виски", 1500.0, 730, false},
-	{"100", "Ром", 1000.0, 730, true},
+// Sample list of routes
+var routes = []Route{
+	{"1", "Route A", 12.5, 8},
+	{"2", "Route B", 25.3, 15},
+	{"3", "Route C", 7.8, 6},
+	{"4", "Route D", 18.0, 10},
+	{"5", "Route E", 30.4, 20},
+	{"6", "Route F", 5.6, 5},
+	{"7", "Route G", 22.2, 12},
+	{"8", "Route H", 10.0, 7},
+	{"9", "Route I", 14.7, 9},
+	{"10", "Route J", 28.9, 18},
+	{"11", "Route K", 9.5, 6},
+	{"12", "Route L", 16.3, 11},
+	{"13", "Route M", 19.8, 14},
+	{"14", "Route N", 26.0, 13},
+	{"15", "Route O", 32.4, 22},
+	{"16", "Route P", 6.3, 5},
+	{"17", "Route Q", 21.7, 16},
+	{"18", "Route R", 11.2, 7},
+	{"19", "Route S", 8.8, 6},
+	{"20", "Route T", 17.9, 10},
+	{"21", "Route U", 15.5, 12},
+	{"22", "Route V", 13.0, 9},
+	{"23", "Route W", 23.4, 18},
+	{"24", "Route X", 20.8, 14},
+	{"25", "Route Y", 29.7, 19},
+	{"26", "Route Z", 27.3, 16},
+	{"27", "Route AA", 31.1, 21},
+	{"28", "Route AB", 33.8, 24},
+	{"29", "Route AC", 7.4, 4},
+	{"30", "Route AD", 9.9, 6},
+	{"31", "Route AE", 16.8, 11},
+	{"32", "Route AF", 18.5, 13},
+	{"33", "Route AG", 24.9, 17},
+	{"34", "Route AH", 30.2, 22},
+	{"35", "Route AI", 10.4, 8},
+	{"36", "Route AJ", 12.6, 9},
+	{"37", "Route AK", 14.9, 11},
+	{"38", "Route AL", 26.5, 19},
+	{"39", "Route AM", 32.9, 23},
+	{"40", "Route AN", 28.1, 20},
+	{"41", "Route AO", 5.8, 5},
+	{"42", "Route AP", 11.3, 7},
+	{"43", "Route AQ", 9.7, 6},
+	{"44", "Route AR", 20.3, 15},
+	{"45", "Route AS", 23.8, 16},
+	{"46", "Route AT", 25.6, 18},
+	{"47", "Route AU", 13.5, 8},
+	{"48", "Route AV", 17.1, 11},
+	{"49", "Route AW", 29.3, 19},
+	{"50", "Route AX", 31.7, 22},
+	{"51", "Route AY", 8.6, 5},
+	{"52", "Route AZ", 19.3, 13},
+	{"53", "Route BA", 21.2, 14},
+	{"54", "Route BB", 24.4, 17},
+	{"55", "Route BC", 33.5, 25},
+	{"56", "Route BD", 27.7, 20},
+	{"57", "Route BE", 10.9, 7},
+	{"58", "Route BF", 14.2, 9},
+	{"59", "Route BG", 15.8, 10},
+	{"60", "Route BH", 22.5, 15},
+	{"61", "Route BI", 30.0, 21},
+	{"62", "Route BJ", 6.7, 4},
+	{"63", "Route BK", 9.4, 6},
+	{"64", "Route BL", 18.7, 12},
+	{"65", "Route BM", 20.0, 13},
+	{"66", "Route BN", 25.0, 18},
+	{"67", "Route BO", 29.0, 19},
+	{"68", "Route BP", 7.2, 5},
+	{"69", "Route BQ", 11.6, 8},
+	{"70", "Route BR", 16.5, 11},
+	{"71", "Route BS", 19.4, 13},
+	{"72", "Route BT", 28.8, 20},
+	{"73", "Route BU", 31.0, 22},
+	{"74", "Route BV", 12.3, 9},
+	{"75", "Route BW", 8.4, 6},
+	{"76", "Route BX", 14.5, 10},
+	{"77", "Route BY", 21.9, 16},
+	{"78", "Route BZ", 23.0, 15},
+	{"79", "Route CA", 26.7, 18},
+	{"80", "Route CB", 30.7, 21},
+	{"81", "Route CC", 7.6, 5},
+	{"82", "Route CD", 11.8, 7},
+	{"83", "Route CE", 13.7, 9},
+	{"84", "Route CF", 18.9, 12},
+	{"85", "Route CG", 22.0, 14},
+	{"86", "Route CH", 27.2, 17},
+	{"87", "Route CI", 9.2, 6},
+	{"88", "Route CJ", 15.4, 11},
+	{"89", "Route CK", 19.1, 13},
+	{"90", "Route CL", 24.7, 18},
+	{"91", "Route CM", 28.3, 21},
+	{"92", "Route CN", 6.5, 4},
+	{"93", "Route CO", 10.1, 7},
+	{"94", "Route CP", 17.3, 11},
+	{"95", "Route CQ", 20.5, 14},
+	{"96", "Route CR", 29.5, 20},
+	{"97", "Route CS", 33.0, 24},
+	{"98", "Route CT", 8.2, 5},
+	{"99", "Route CU", 12.9, 8},
+	{"100", "Route CV", 16.1, 10},
 }
 
 func main() {
-	http.HandleFunc("/products", getProductsByShelfLife)
+	http.HandleFunc("/routes", getRoutesByLength)
 
 	port := ":9080"
 	fmt.Printf("Server is running on port %s...\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 
-// Функция для поиска продуктов по сроку годности
-func getProductsByShelfLife(w http.ResponseWriter, r *http.Request) {
-	minShelfLife := r.URL.Query().Get("min_shelf_life")
-	maxShelfLife := r.URL.Query().Get("max_shelf_life")
+// getRoutesByLength filters bus routes based on their length
+func getRoutesByLength(w http.ResponseWriter, r *http.Request) {
+	minLengthStr := r.URL.Query().Get("min_length")
+	maxLengthStr := r.URL.Query().Get("max_length")
 
-	if minShelfLife == "" || maxShelfLife == "" {
-		http.Error(w, "Both min_shelf_life and max_shelf_life query parameters are required", http.StatusBadRequest)
+	if minLengthStr == "" || maxLengthStr == "" {
+		http.Error(w, "Both min_length and max_length query parameters are required", http.StatusBadRequest)
 		return
 	}
 
-	// Преобразуем строковые значения в целые числа
-	minShelfLifeVal, err := strconv.Atoi(minShelfLife)
+	// Convert string values to float
+	minLength, err := strconv.ParseFloat(minLengthStr, 64)
 	if err != nil {
-		http.Error(w, "Invalid min_shelf_life value", http.StatusBadRequest)
+		http.Error(w, "Invalid min_length value", http.StatusBadRequest)
 		return
 	}
 
-	maxShelfLifeVal, err := strconv.Atoi(maxShelfLife)
+	maxLength, err := strconv.ParseFloat(maxLengthStr, 64)
 	if err != nil {
-		http.Error(w, "Invalid max_shelf_life value", http.StatusBadRequest)
+		http.Error(w, "Invalid max_length value", http.StatusBadRequest)
 		return
 	}
 
-	// Ищем продукты в указанном интервале срока годности
-	var result []Product
-	for _, product := range products {
-		if product.ShelfLife >= minShelfLifeVal && product.ShelfLife <= maxShelfLifeVal {
-			result = append(result, product)
+	// Find routes within the specified length range
+	var result []Route
+	for _, route := range routes {
+		if route.Length >= minLength && route.Length <= maxLength {
+			result = append(result, route)
 		}
 	}
 
-	// Если продукты не найдены
+	// If no routes are found
 	if len(result) == 0 {
-		http.Error(w, "No products found within the specified shelf life range", http.StatusNotFound)
+		http.Error(w, "No routes found within the specified length range", http.StatusNotFound)
 		return
 	}
 
-	// Отправляем результат в виде JSON
+	// Send the result as JSON
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(result)

@@ -8,7 +8,9 @@
 
 Ответ от сервера будет содержать данные о точках интереса в формате JSON:
 
-\begin{verbatim} [ { "id": "1", "name": "Eiffel Tower", "description": "Iconic symbol of Paris", "category": "Landmark", "latitude": 48.8584, "longitude": 2.2945 } ] \end{verbatim}
+\begin{verbatim} [ { "id": "1", "name": "Eiffel Tower", 
+    "description": "Iconic symbol of Paris", "category": "Landmark", 
+    "latitude": 48.8584, "longitude": 2.2945 } ] \end{verbatim}
 
 \subsection{Локальное хранение данных} Для хранения результатов запросов используйте \texttt{Room}. После получения данных с сервера они должны сохраняться в локальной базе данных, чтобы обеспечить возможность работы в офлайн-режиме. Кэшированные данные должны быть доступны при отсутствии интернета.
 
