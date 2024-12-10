@@ -34,11 +34,11 @@ jobs:
       - name: create document with questions
         uses: dante-ev/latex-action@latest
         with:
-          root_file: exam/exam_document.tex
+          root_file: exam_document.tex
           compiler: pdflatex
       - name: copy questions
         shell: bash
-        run: cp exam/exam_document.pdf dist/${{ steps.extract_branch.outputs.branch }}
+        run: cp exam_document.pdf dist/${{ steps.extract_branch.outputs.branch }}
       - name: Publish generated content to GitHub Pages
         uses: tsunematsu21/actions-publish-gh-pages@v1.0.2
         with:
