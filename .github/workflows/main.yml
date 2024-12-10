@@ -33,15 +33,15 @@ jobs:
         run: cd exam && python3 generate_list.py
       - name: create list of questions latex document
         shell: bash
-        run: ls -la
+        run: ls -la exam
       - name: create document with questions
         uses: dante-ev/latex-action@latest
         with:
-          root_file: exam_document.tex
+          root_file: exam/exam_document.tex
           compiler: pdflatex
       - name: copy questions
         shell: bash
-        run: cp exam_document.pdf dist/${{ steps.extract_branch.outputs.branch }}
+        run: cp exam/exam_document.pdf dist/${{ steps.extract_branch.outputs.branch }}
       - name: Publish generated content to GitHub Pages
         uses: tsunematsu21/actions-publish-gh-pages@v1.0.2
         with:
