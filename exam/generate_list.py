@@ -59,7 +59,7 @@ for i in range(1, 26):  # Генерируем номера файлов от 1/
     task_file = os.path.join(tasks_dir, f"{i}/task.tex")
     if os.path.exists(task_file):
         with open(task_file, 'r', encoding='utf-8') as f:
-            practical_tasks.append(f"\\subsection*{{Задание {i}}}\n" + f.read())
+            practical_tasks.append(f"\\subsection*{{Задание {i}}}\n" + f.read().replace("_","\\_"))
 
 practical_section = "\n".join(practical_tasks)
 
