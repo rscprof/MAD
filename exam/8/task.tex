@@ -4,14 +4,17 @@
 
 %\subsection{Подключение к серверу} 
 
-Клиент должен взаимодействовать с сервером по адресу \texttt{http://10.0.2.2:9080/searchByCountry}. Используйте библиотеку \texttt{Retrofit} для выполнения запросов к API. Пример запроса:
+Клиент должен взаимодействовать с сервером по адресу 
+
+\texttt{http://10.0.2.2:9080/searchByCountry}. Используйте библиотеку \texttt{Retrofit} для выполнения запросов к API. Пример запроса:
 
 \begin{verbatim} GET http://10.0.2.2:9080/searchByCountry?country=France \end{verbatim}
 
 Ответ от сервера будет содержать данные о туристических местах в формате JSON:
 
 \begin{verbatim} { "places": [ { "id": "1", "name": "Eiffel Tower", 
-    "country": "France", "description": "Iconic iron lattice tower in Paris.", 
+    "country": "France", 
+    "description": "Iconic iron lattice tower in Paris.", 
     "popularity": 98 } ] } \end{verbatim}
 
 %\subsection{Локальное хранение данных} 
