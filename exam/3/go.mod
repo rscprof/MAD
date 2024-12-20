@@ -1,4 +1,4 @@
-module github.com/rscprof/MAD/exam/2
+module github.com/rscprof/MAD/exam/3
 
 go 1.23.2
 

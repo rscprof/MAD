@@ -1,21 +1,21 @@
-\section{Задание на разработку Android-клиента для работы с сервером ресторанов}
+%\section{Задание на разработку Android-клиента для работы с сервером ресторанов}
 
 Разработать Android-клиент для взаимодействия с сервером, предоставляющим REST API для поиска ресторанов по типу кухни. 
 
-\subsection{Основные требования}
+%\subsection{Основные требования}
 \begin{itemize}
-    \item Сервер доступен по адресу \texttt{http://10.0.2.2:9080/restaurants}.
+    \item Адрес сервера: \texttt{http://10.0.2.2:9080/restaurants}.
     \item Для выполнения запросов используйте \texttt{Retrofit}. Пример запроса:
 \begin{verbatim}
 GET http://10.0.2.2:9080/restaurants?cuisine=Japanese
 \end{verbatim}
-Ответ в формате JSON содержит список ресторанов с полями \texttt{id}, \texttt{name}, \texttt{cuisine}, \texttt{city} и \texttt{is\_open}.
+Ответ в формате JSON содержит список ресторанов с полями \texttt{id}, \texttt{name}, \texttt{cuisine}, \texttt{city} и \texttt{is_open}.
 \end{itemize}
 
-\subsection{Хранение данных}
+%\subsection{Хранение данных}
 Сохранять данные запросов в локальной базе с помощью \texttt{Room} для работы в офлайн-режиме.
 
-\subsection{Архитектура}
+%\subsection{Архитектура}
 Использовать архитектуру MVVM для разделения логики и интерфейса:
 \begin{itemize}
     \item \texttt{ViewModel} отвечает за запросы к API и управление данными.
@@ -23,11 +23,8 @@ GET http://10.0.2.2:9080/restaurants?cuisine=Japanese
     \item UI на основе \texttt{Jetpack Compose}.
 \end{itemize}
 
-\subsection{Интерфейс}
+%\subsection{Интерфейс}
 Реализовать экран для ввода типа кухни и отображения списка ресторанов, с поддержкой офлайн-режима.
 
-\subsection{Рекомендации}
-\begin{itemize}
-    \item Обновлять данные при подключении к интернету.
-    \item Реализовать обработку ошибок (например, отсутствие параметра \texttt{cuisine}).
-\end{itemize}
+%\subsection{Рекомендации}
+Реализовать обработку ошибок (например, отсутствие параметра \texttt{cuisine}).

@@ -1,0 +1,31 @@
+\documentclass[a4paper]{article}
+\usepackage{xltxtra}
+
+\usepackage{polyglossia}
+\setmainlanguage{russian}
+
+%\setkeys{russian}{babelshorthands=true}
+
+\setmainfont{Times New Roman}
+\setromanfont{Times New Roman} 
+\setsansfont{Arial} 
+\setmonofont{Courier New} 
+
+\newfontfamily{\cyrillicfont}{Times New Roman} 
+\newfontfamily{\cyrillicfontrm}{Times New Roman}
+\newfontfamily{\cyrillicfonttt}{Courier New}
+\newfontfamily{\cyrillicfontsf}{Arial}
+
+\usepackage{array}
+\usepackage{verbatim}
+%\usepackage[utf8]{inputenc} % Кодировка
+%\usepackage[russian]{babel} % Поддержка русского языка
+%\usepackage{fontspec} % Для указания шрифтов (только XeLaTeX или LuaLaTeX)
+%\setmainfont{Times New Roman} % Установка Times New Roman как основного шрифта
+\usepackage{geometry} % Настройка полей страницы
+\geometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
+%\renewcommand{\baselinestretch}{1.5} % Межстрочный интервал
+\pagestyle{empty}
+\begin{document}
+@content@
+\end{document}
