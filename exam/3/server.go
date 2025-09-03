@@ -168,7 +168,7 @@ func searchCitizens(w http.ResponseWriter, r *http.Request) {
 	minAge, _ := strconv.Atoi(minAgeStr)
 	maxAge, _ := strconv.Atoi(maxAgeStr)
 
-	var results []Citizen
+	var results []Citizen = make([]Citizen,0)
 	for _, citizen := range citizens {
 		if citizen.Age >= minAge && citizen.Age <= maxAge {
 			results = append(results, citizen)

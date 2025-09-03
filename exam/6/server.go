@@ -126,7 +126,7 @@ func searchAnimeByTitle(w http.ResponseWriter, r *http.Request) {
 	// Convert to lowercase for case-insensitive search
 	titleQuery = strings.ToLower(titleQuery)
 
-	var results []Anime
+	var results []Anime = make([]Anime,0)
 	for _, anime := range animeList {
 		if strings.Contains(strings.ToLower(anime.Title), titleQuery) {
 			results = append(results, anime)

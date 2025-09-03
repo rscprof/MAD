@@ -151,7 +151,7 @@ func getProductsByPrice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем продукты в указанном интервале цен
-	var result []Product
+	var result []Product = make([]Product,0)
 	for _, product := range products {
 		if product.Price >= minPriceVal && product.Price <= maxPriceVal {
 			result = append(result, product)

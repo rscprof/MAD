@@ -122,7 +122,7 @@ var placesList = []Place{
 // Функция поиска туристических мест по частичному совпадению названия.
 func searchPlacesByName(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("name")
-	var results []Place
+	var results []Place = make([]Place,0)
 
 	for _, place := range placesList {
 		if strings.Contains(strings.ToLower(place.Name), strings.ToLower(query)) {

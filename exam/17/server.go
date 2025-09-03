@@ -137,7 +137,7 @@ func getRestaurantsByCuisine(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем рестораны, соответствующие типу кухни
-	var result []Restaurant
+	var result []Restaurant = make([]Restaurant,0)
 	for _, restaurant := range restaurants {
 		if strings.EqualFold(restaurant.Cuisine, cuisine) {
 			result = append(result, restaurant)

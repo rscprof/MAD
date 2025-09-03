@@ -173,7 +173,7 @@ func searchPlacesByCountry(c *gin.Context) {
 		return
 	}
 
-	var results []Place
+	var results []Place = make([]Place,0)
 	for _, place := range placesList {
 		if strings.Contains(strings.ToLower(place.Country), strings.ToLower(country)) {
 			results = append(results, place)

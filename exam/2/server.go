@@ -163,7 +163,7 @@ var citizens = []Citizen{
 func searchCitizens(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("name")
 
-	var results []Citizen
+	var results []Citizen = make([]Citizen,0)
 	for _, citizen := range citizens {
 		if strings.Contains(strings.ToLower(citizen.Name), strings.ToLower(query)) {
 			results = append(results, citizen)

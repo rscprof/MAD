@@ -152,7 +152,7 @@ func getRoutesByLength(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Find routes within the specified length range
-	var result []Route
+	var result []Route = make([]Route,0)
 	for _, route := range routes {
 		if route.Length >= minLength && route.Length <= maxLength {
 			result = append(result, route)

@@ -127,7 +127,7 @@ func searchRestaurants(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 
 	// Фильтруем рестораны по названию
-	var filteredRestaurants []Restaurant
+	var filteredRestaurants []Restaurant = make([]Restaurant,0)
 	for _, restaurant := range restaurants {
 		// Если в названии содержится значение параметра "name", добавляем в результат
 		if name != "" && strings.Contains(strings.ToLower(restaurant.Name), strings.ToLower(name)) {

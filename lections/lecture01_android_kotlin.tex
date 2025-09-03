@@ -1,0 +1,588 @@
+% !TEX program = xelatex % Указываем, что компилятор - XeLaTeX
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+% ---------- Encoding & language (xelatex-friendly) ----------
+\usepackage{polyglossia} % Вместо babel для XeLaTeX
+\setdefaultlanguage{russian}
+\setotherlanguages{english}
+
+\usepackage{fontspec} % Для работы со шрифтами
+\setmainfont{CMU Serif} % Установка основного шрифта (аналог Computer Modern)
+\setsansfont{CMU Sans Serif} % Установка шрифта без засечек
+\setmonofont{CMU Typewriter Text} % Установка моноширинного шрифта
+
+% ---------- Common packages ----------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{ulem}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,shapes.misc}
+
+% ---------- Listings (Kotlin/Java) ----------
+\usepackage{listings} % Используем стандартный listings (inputenc не нужен)
+\usepackage[dvipsnames]{xcolor}
+
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle={\color{gray}\ttfamily},
+  emph={filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println, launch, async, await, withContext},
+  emphstyle={\color{OrangeRed}},
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiver, reified, return, return@, sealed, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle={\color{NavyBlue}\bfseries},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  ndkeywords={@Composable, @Preview, @Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing},
+  ndkeywordstyle={\color{BurntOrange}\bfseries},
+  sensitive=true,
+  stringstyle={\color{ForestGreen}\ttfamily}
+}
+
+\lstdefinelanguage{JavaLite}{
+  language=Java,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{NavyBlue}\bfseries,
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{ForestGreen}\ttfamily
+}
+
+\lstset{
+  % inputencoding=utf8, % Не нужно для XeLaTeX
+  extendedchars=true,
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true,
+  showstringspaces=false,
+  frame=single,
+  framerule=0.2pt,
+  tabsize=2,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=6pt
+}
+
+% ---------- Title ----------
+\title{Введение в мобильную разработку (Android/Kotlin)}
+\subtitle{Лекция 1: Подходы к созданию мобильных приложений, структура курса и обзор Kotlin}
+\author{Александр Глускер}
+\institute{Курс «Мобильная разработка»}
+\date{\today}
+
+% ---------- TOC at section start ----------
+\AtBeginSection[]{
+  \begin{frame}{Навигация по лекции}
+    \tableofcontents[currentsection, hideallsubsections]
+  \end{frame}
+}
+
+\begin{document}
+
+% ================== Title ==================
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ================== Agenda ==================
+\begin{frame}{Содержание}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.55\textwidth}
+      \begin{enumerate}
+        \item Формальности и знакомство 
+        \item Введение 
+        \item Подходы к мобильной разработке
+        \item Kotlin: обзор языка и примеры
+        \item Итоги, Q\&A
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Цели лекции}
+        \begin{itemize}
+          \item Разобраться в требованиях курса и оценивании
+          \item Понять ландшафт мобильной разработки
+          \item Увидеть особенности Kotlin
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Формальности и знакомство}
+
+\begin{frame}{Как мы учимся на курсе}
+  \begin{itemize}
+    \item \textbf{Лекции}: теория (только главное), обзор, мастер-классы (но на них будет не всё)
+    \item \textbf{Семинары}: разбор заданий (если все будет хорошо), сдача
+    \item \textbf{Дома}: выполнение задания
+  \end{itemize}
+  \begin{block}{Инструменты}
+    IntelliJ Idea, Android Studio
+  \end{block}
+\end{frame}
+
+\begin{frame}{Оценивание и контроль}
+  \begin{itemize}
+    \item \textbf{Практические задания:} на каждом семинаре
+    \item \textbf{Полусеместр} письменный тест (от руки) + накопленная оценка за практику
+    \item \textbf{Финальный экзамен:} или с нуля (теория + практика), или накопленная оценка
+    \item \textbf{Проекты etc:} возможны к учету
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Политика курса}
+  \begin{itemize}
+    \item Дедлайны по практикам, их можно сдавать позже, но оценка ниже и приоритет тем, кто сдает вовремя
+    \item Код должен соответствовать стандартам (обсудим)
+    \item Как можно использовать AI (методика проверки)
+    \item Вопросы в начале пар
+  \end{itemize}
+\end{frame}
+
+
+% =====================================================
+\section{Подходы к мобильной разработке}
+% =====================================================
+
+\begin{frame}{Ландшафт: основные подходы}
+  \begin{itemize}
+    \item Нативная разработка (Android: Kotlin/Java; iOS: Swift)
+    \item Кросс-платформенная (Flutter, React Native, Kotlin Multiplatform, .NET MAUI)
+    \item Гибридная (Ionic/Cordova)
+    \item PWA (продвинутые веб-приложения)
+    \item Low-code/No-code
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Нативная разработка: архитектура}
+  \centering
+  \begin{tikzpicture}[node distance=5mm, every node/.style={align=center}]
+    \node[draw, rounded corners, fill=gray!10, minimum width=0.9\linewidth, inner sep=3mm] (app) {Приложение (Kotlin/Swift) \\ + UI (Jetpack Compose/SwiftUI) \\ + Домены и Use Cases};
+    \node[draw, rounded corners, fill=gray!10, below=of app, minimum width=0.9\linewidth, inner sep=3mm] (sdk) {SDK/Фреймворки платформы (Android Jetpack / iOS Frameworks)};
+    \node[draw, rounded corners, fill=gray!10, below=of sdk, minimum width=0.9\linewidth, inner sep=3mm] (os) {ОС и драйверы (Доступ к датчикам, сети, файловой системе)};
+    \draw[-{Latex}] (app) -- (sdk);
+    \draw[-{Latex}] (sdk) -- (os);
+  \end{tikzpicture}
+  \vspace{3mm}
+
+  \begin{itemize}
+    \item \textbf{Плюсы:} производительность, полный доступ к API, лучший UX
+    \item \textbf{Минусы:} отдельные коды для iOS/Android, выше стоимость
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Кросс-платформенные решения}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Flutter (Dart)}
+        \begin{itemize}
+          \item Собственный рендеринг UI
+          \item Отличная скорость разработки (hot reload)
+        \end{itemize}
+      \end{block}
+      \begin{block}{React Native (JS)}
+        \begin{itemize}
+          \item JS/TS стек, мост к нативным компонентам
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Kotlin Multiplatform (KMP)}
+        \begin{itemize}
+          \item Общая бизнес-логика, нативные UI
+          \item Поддержка Авроры :-)
+        \end{itemize}
+      \end{block}
+      \begin{block}{.NET MAUI}
+        \begin{itemize}
+          \item C\#/.NET, единый стек Microsoft
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{2mm}
+  \textbf{Риски:} тонкости производительности, мосты к нативу, обновления экосистем
+\end{frame}
+
+\begin{frame}{Гибридные приложения и PWA}
+  \begin{itemize}
+    \item \textbf{Гибрид:} веб-страницы в нативном контейнере (WebView)
+    \item \textbf{PWA:} офлайн-кеш, иконка на рабочем столе, уведомления (где поддерживается)
+  \end{itemize}
+  \begin{block}{Когда это уместно}
+    \begin{itemize}
+      \item Контентные приложения, MVP, быстрые пилоты
+      \item Корпоративные внутренние инструменты
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Сравнение подходов (краткая таблица)}
+  \small
+  \begin{tabularx}{\linewidth}{l *{4}{>{\centering\arraybackslash}X}}
+    \toprule
+    & \textbf{Натив} & \textbf{Кросс-платф.} & \textbf{Гибрид} & \textbf{PWA} \\
+    \midrule
+    Производительность & \textbf{Высокая} & Средняя/Высокая & Средняя & Низк./Средн. \\
+    Доступ к API       & \textbf{Полный} & Почти полный & Ограничен & Ограничен \\
+    Стоимость          & Высокая & \textbf{Ниже} & Низкая & \textbf{Низкая} \\
+    UX/Нативный вид    & \textbf{Лучший} & Хороший & Посредственный & Зависит от браузера \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% =====================================================
+\section{Kotlin: обзор языка и примеры}
+% =====================================================
+
+\begin{frame}{Kotlin в двух словах}
+  \begin{itemize}
+    \item Современный, статически типизированный язык от JetBrains
+    \item Официально поддерживается Google для Android
+    \item Сильная совместимость с Java (JVM), есть KMP
+    \item Философия: лаконичность, безопасность, практичность
+    \item Поддерживает \textbf{функциональную / декларативную}, 
+    \textbf{объектно-ориентированную}, \textbf{алгоритмическую} парадигмы, обобщенное программирование
+    \item Библиотека реализует идеи реактивного программирования
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hello, Kotlin}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Hello, Kotlin!")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Сравнение: Java vs Kotlin}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.48\textwidth}
+\textbf{Java}
+\lstset{language=JavaLite}
+\begin{lstlisting}
+// Java
+public class User {
+  private final String name;
+  public User(String name) { this.name = name; }
+  public String getName() { return name; }
+}
+\end{lstlisting}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Kotlin}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+// Kotlin
+data class User(val name: String)
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Null-safety}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+var name: String? = null     // Можно\ хранить\ null
+println(name?.length)        // Безопасный вызов -> null
+println(name ?: "нет имени") // Elvis-оператор
+\end{lstlisting}
+\begin{block}{Важно}
+Оператор \texttt{!!} бросает NPE — используйте его осознанно.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Функции, лямбды, расширения}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun Int.isEven(): Boolean = this % 2 == 0
+
+val nums = listOf(1, 2, 3, 4)
+val evens = nums.filter { it.isEven() }  // [2, 4]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Сравнение с Java: обработка null и коллекции}
+\begin{columns}[T,onlytextwidth]
+\begin{column}{0.48\textwidth}
+\textbf{Java}
+\lstset{language=JavaLite}
+\begin{lstlisting}
+List<Integer> xs = Arrays.asList(1,2,3);
+List<Integer> evens = xs.stream()
+  .filter(x -> x % 2 == 0)
+  .collect(Collectors.toList());
+\end{lstlisting}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Kotlin}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val xs = listOf(1, 2, 3)
+val evens = xs.filter { it % 2 == 0 }
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Где применяется Kotlin}
+\begin{itemize}
+  \item Android-разработка (официальный язык Google)
+  \item Backend: Spring, Ktor, Micronaut
+  \item Kotlin Multiplatform: общая логика для Android/iOS
+  \item Kotlin/Native: десктопные, серверные, встраиваемые приложения
+  \item Kotlin/JS: веб-разработка
+  \item Скрипты и утилиты (JVM)
+\end{itemize}
+\end{frame}
+
+\section{Основы Kotlin}
+
+\begin{frame}[fragile]{Переменные: var и val}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+var x = 10     // изменяемая переменная
+x = 20
+val y = 30     // неизменяемая (аналог final)
+\end{lstlisting}
+\begin{block}{Важно}
+Используйте \texttt{val} по умолчанию.  
+\texttt{var} — только когда нужно изменять значение.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Базовые типы}
+\begin{itemize}
+  \item Числовые: \texttt{Int}, \texttt{Long}, \texttt{Double}, \texttt{Float}, \texttt{Short}, \texttt{Byte}
+  \item Логический: \texttt{Boolean}
+  \item Символьный: \texttt{Char}
+  \item Строковый: \texttt{String}
+\end{itemize}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val a: Int = 42
+val b: Double = 3.14
+val c: String = "Kotlin"
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{if: базовый оператор}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val a = 10
+if (a > 0) {
+    println("a положительное")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{if-else}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val a = -5
+if (a >= 0) {
+    println("Неотрицательное")
+} else {
+    println("Отрицательное")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{if как выражение}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val a = 5
+val b = 7
+val max = if (a > b) a else b
+println("Максимум = $max")
+\end{lstlisting}
+\begin{block}{Важно}
+\texttt{if} возвращает значение, как в функциональных языках.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{if с несколькими ветками}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val grade = 75
+val result = if (grade >= 90) "Отлично"
+             else if (grade >= 70) "Хорошо"
+             else if (grade >= 50) "Удовлетворительно"
+             else "Плохо"
+
+println(result)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{when: базовый вариант}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val x = 2
+when (x) {
+    1 -> println("Один")
+    2 -> println("Два")
+    else -> println("Другое")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{when без аргумента}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val y = -3
+when {
+    y < 0 -> println("Отрицательное")
+    y == 0 -> println("Ноль")
+    else -> println("Положительное")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{when с диапазонами и множеством значений}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val x = 7
+when (x) {
+    0, 1 -> println("Ноль или один")
+    in 2..5 -> println("От двух до пяти")
+    !in 6..10 -> println("Не от шести до десяти")
+    else -> println("От шести до десяти")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{when и типы (smart cast)}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun process(obj: Any) = when (obj) {
+    is String -> println("Строка длиной ${obj.length}")
+    is Int -> println("Целое число: $obj")
+    else -> println("Неизвестный тип")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{when как выражение}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val day = 3
+val name = when (day) {
+    1 -> "Понедельник"
+    2 -> "Вторник"
+    3 -> "Среда"
+    else -> "Выходной"
+}
+println(name)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{when с произвольными условиями}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val a = 10
+val b = 20
+val relation = when {
+    a < b -> "a меньше b"
+    a > b -> "a больше b"
+    else -> "a равно b"
+}
+println(relation)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Приведение типов}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val n: Int = 42
+val d: Double = n.toDouble()  // явное преобразование
+
+val obj: Any = "строка"
+if (obj is String) {
+    println(obj.length)  // smart cast
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Выражения в Kotlin}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val result = try {
+    10 / 2
+} catch (e: Exception) {
+    -1
+}
+println(result)
+\end{lstlisting}
+\begin{block}{Важно}
+В Kotlin почти всё — выражения: \texttt{if}, \texttt{when}, \texttt{try}, лямбды.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Ввод и вывод}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Введите имя:")
+    val name = readln()
+    println("Привет, $name!")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Как надо писать практики}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Введите первое число:")
+    val a = readlnOrNull()?.toIntOrNull()
+    println("Введите второе число:")
+    val b = readlnOrNull()?.toIntOrNull()
+
+    if (a != null && b != null) {
+        val sum: Int? = if ((b > 0 && a > Int.MAX_VALUE - b) ||
+                            (b < 0 && a < Int.MIN_VALUE - b)) {
+            null
+        } else {
+            a + b
+        }
+
+        if (sum != null) {
+            println("Сумма: $sum")
+        } else {
+            println("Ошибка: переполнение Int")
+        }
+    } else {
+        println("Ошибка: введите корректные целые числа")
+    }
+}
+\end{lstlisting}
+\begin{block}{Особенности}
+\begin{itemize}
+  \item Проверка до сложения исключает переполнение
+  \item Абсолютно безопасный ввод: \texttt{readlnOrNull() + toIntOrNull()}
+  \item Нет необходимости использовать дополнительные функции или BigInteger
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+% =====================================================
+\section{Резюме}
+% =====================================================
+
+\begin{frame}{Итоги лекции}
+  \begin{itemize}
+    \item Обсудили формат курса, оценивание и ожидания
+    \item Поняли различия подходов к мобильной разработке и критерии выбора
+    \item Познакомились с Kotlin: синтаксис, null-safety, примеры фунционального подхода
+  \end{itemize} % Исправлена опечатка: </end{itemize> на \end{itemize}
+\end{frame}
+
+
+\end{document}

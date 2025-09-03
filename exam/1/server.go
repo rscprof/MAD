@@ -163,7 +163,7 @@ var albums = []Album{
 func searchAlbums(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("title")
 
-	var results []Album
+	var results []Album = make([]Album,0)
 	for _, album := range albums {
 		if strings.Contains(strings.ToLower(album.Title), strings.ToLower(query)) {
 			results = append(results, album)

@@ -132,7 +132,7 @@ func searchByCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Фильтруем достопримечательности по категории
-	var filteredLocations []Location
+	var filteredLocations []Location = make([]Location,0)
 	for _, location := range locations {
 		if strings.EqualFold(location.Category, category) {
 			filteredLocations = append(filteredLocations, location)
@@ -157,8 +157,8 @@ func main() {
 	http.HandleFunc("/search", searchByCategory)
 
 	// Запускаем сервер
-	log.Println("Server started on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	log.Println("Server started on :9080")
+	if err := http.ListenAndServe(":9080", nil); err != nil {
 		log.Fatalf("Error starting server: %s", err)
 	}
 }

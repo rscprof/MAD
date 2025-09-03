@@ -153,7 +153,7 @@ func getApartmentsByYear(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем квартиры в указанном интервале годов
-	var result []Apartment
+	var result []Apartment = make([]Apartment,0)
 	for _, apartment := range apartments {
 		if apartment.YearBuilt >= minYearVal && apartment.YearBuilt <= maxYearVal {
 			result = append(result, apartment)

@@ -151,7 +151,7 @@ func getProductsByShelfLife(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем продукты в указанном интервале сроков годности
-	var result []Product
+	var result []Product = make([]Product,0)
 	for _, product := range products {
 		if product.ShelfLife >= minShelfLifeVal && product.ShelfLife <= maxShelfLifeVal {
 			result = append(result, product)

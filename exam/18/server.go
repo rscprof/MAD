@@ -137,7 +137,7 @@ func getRestaurantsByCity(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем рестораны, которые находятся в указанном городе
-	var result []Restaurant
+	var result []Restaurant = make([]Restaurant,0)
 	for _, restaurant := range restaurants {
 		if strings.EqualFold(restaurant.City, city) {
 			result = append(result, restaurant)

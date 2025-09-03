@@ -122,7 +122,7 @@ var animeList = []Anime{
 func searchAnime(w http.ResponseWriter, r *http.Request) {
 	genreQuery := strings.ToLower(r.URL.Query().Get("genre"))
 
-	var results []Anime
+	var results []Anime = make([]Anime,0)
 	for _, anime := range animeList {
 		if strings.Contains(strings.ToLower(anime.Genre), genreQuery) {
 			results = append(results, anime)

@@ -132,7 +132,7 @@ func searchAnime(w http.ResponseWriter, r *http.Request) {
 		maxEpisodes = 1 << 30 // Set to a very high number if not provided
 	}
 
-	var results []Anime
+	var results []Anime = make([]Anime,0)
 	for _, anime := range animeList {
 		if anime.Episodes >= minEpisodes && anime.Episodes <= maxEpisodes {
 			results = append(results, anime)

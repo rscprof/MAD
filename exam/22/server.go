@@ -153,7 +153,7 @@ func getApartmentsByArea(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем квартиры в указанном интервале площади
-	var result []Apartment
+	var result []Apartment = make([]Apartment,0)
 	for _, apartment := range apartments {
 		if apartment.Area >= minAreaVal && apartment.Area <= maxAreaVal {
 			result = append(result, apartment)

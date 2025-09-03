@@ -128,7 +128,7 @@ func searchLocations(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 
 	// Фильтруем достопримечательности по названию
-	var filteredLocations []Location
+	var filteredLocations []Location = make([]Location,0)
 	for _, location := range locations {
 		// Если в названии содержится значение параметра "name", добавляем в результат
 		if name != "" && strings.Contains(strings.ToLower(location.Name), strings.ToLower(name)) {

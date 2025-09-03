@@ -153,7 +153,7 @@ func getApartmentsByPrice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ищем квартиры в указанном ценовом диапазоне
-	var result []Apartment
+	var result []Apartment = make([]Apartment,0)
 	for _, apartment := range apartments {
 		if apartment.Price >= minPriceVal && apartment.Price <= maxPriceVal {
 			result = append(result, apartment)

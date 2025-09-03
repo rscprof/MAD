@@ -133,7 +133,7 @@ func searchBooksByYearRange(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Фильтрация книг
-	var results []Book
+	var results []Book = make([]Book,0)
 	for _, book := range booksList {
 		if book.Year >= startYear && book.Year <= endYear {
 			results = append(results, book)

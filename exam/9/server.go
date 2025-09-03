@@ -148,7 +148,7 @@ func searchPlacesByPopularity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var results []Place
+	var results []Place = make([]Place,0)
 	for _, place := range placesList {
 		if place.Popularity >= min && place.Popularity <= max {
 			results = append(results, place)
