@@ -538,9 +538,9 @@ fun main() {
 \lstset{language=Kotlin}
 \begin{lstlisting}
 fun main() {
-    println("Введите первое число:")
+    println("Введите первое\ число:")
     val a = readlnOrNull()?.toIntOrNull()
-    println("Введите второе число:")
+    println("Введите второе\ число:")
     val b = readlnOrNull()?.toIntOrNull()
 
     if (a != null && b != null) {
@@ -551,6 +551,13 @@ fun main() {
             a + b
         }
 
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{Как надо писать практики (продолжение)}
+\lstset{language=Kotlin}
+\begin{lstlisting}
         if (sum != null) {
             println("Сумма: $sum")
         } else {
@@ -565,7 +572,6 @@ fun main() {
 \begin{itemize}
   \item Проверка до сложения исключает переполнение
   \item Абсолютно безопасный ввод: \texttt{readlnOrNull() + toIntOrNull()}
-  \item Нет необходимости использовать дополнительные функции или BigInteger
 \end{itemize}
 \end{block}
 \end{frame}
