@@ -1,0 +1,41 @@
+\subsection{Семинар <<Оператор when с проверкой типов (is) и Unit-тестирование>> (2 часа)}
+
+Цель работы — освоить использование оператора \texttt{when} для безопасной обработки значений разных типов.
+
+При выполнении заданий используйте идиоматичный Kotlin:
+\begin{itemize}
+\item \texttt{if} и \texttt{when} могут быть выражениями (возвращать значение);
+    \item фигурные скобки можно опускать для однострочных веток;
+    \item точки с запятой не используются;
+    \item переменные помечайте \texttt{val}, если их значение не меняется.
+\end{itemize}
+
+Разработайте функцию для вашего варианта задания, а также Unit-тесты для проверки её работы во всех случаях. Для написания Unit-тестов используйте библиотеку \texttt{kotlin.test}. Напишите минимум 3–5 тестов, покрывающих разные типы входных данных, включая \texttt{null} и неожиданные типы.
+
+\begin{enumerate}
+    \item \textbf{toStringSafe}: Вернуть строковое представление значения. Для \texttt{Int}, \texttt{Double}, \texttt{Boolean} — стандартное \texttt{toString()}. Для \texttt{String} — саму строку. Для \texttt{List<Any?>} — строку вида "[элемент1, элемент2, ...]" (элементы тоже через \texttt{toStringSafe}). Для \texttt{null} — "null". Для всех остальных типов — пустую строку.
+    \item \textbf{toNumericValue}: Вернуть числовое значение. Для \texttt{Int}, \texttt{Double}, \texttt{Long} — само число как \texttt{Double}. Для \texttt{String}, содержащей число — преобразовать и вернуть. Для \texttt{Boolean} — 1.0 (true) или 0.0 (false). Для всех остальных — null.
+    \item \textbf{getSizeOrLength}: Вернуть "размер" значения. Для \texttt{String} — длина. Для \texttt{List}, \texttt{Array}, \texttt{Set} — количество элементов. Для \texttt{Map} — количество ключей. Для \texttt{Int}, \texttt{Double} — количество цифр в числе (игнорируя знак и точку). Для всех остальных — -1.
+    \item \textbf{isEmptyOrZero}: Вернуть \texttt{true}, если значение "пустое". Для \texttt{String} — если пустая или null. Для \texttt{List}, \texttt{Set}, \texttt{Array} — если пусто или null. Для \texttt{Int}, \texttt{Double} — если равно 0. Для \texttt{Boolean} — если false. Для всех остальных — true.
+    \item \textbf{toBooleanSafe}: Вернуть логическое значение. Для \texttt{Boolean} — само значение. Для \texttt{Int} — true, если не 0. Для \texttt{String} — true, если "true", "1", "yes" (без учёта регистра). Для \texttt{List}, \texttt{Array} — true, если не пусто. Для всех остальных — false.
+    \item \textbf{getFirstElement}: Вернуть первый элемент или символ. Для \texttt{String} — первый символ (или null, если пусто). Для \texttt{List}, \texttt{Array} — первый элемент (или null). Для \texttt{Int} — первую цифру числа. Для всех остальных — null.
+    \item \textbf{getLastElement}: Вернуть последний элемент или символ. Для \texttt{String} — последний символ. Для \texttt{List}, \texttt{Array} — последний элемент. Для \texttt{Int} — последнюю цифру. Для всех остальных — null.
+    \item \textbf{toDisplayString}: Вернуть человекочитаемое описание. Для \texttt{String} — "Строка: <значение>". Для \texttt{Int} — "Целое число: <значение>". Для \texttt{Boolean} — "Логическое: <значение>". Для \texttt{List} — "Список из N элементов". Для всех остальных — "Неизвестный тип".
+    \item \textbf{countDigitsOrLetters}: Вернуть количество цифр (если число) или букв (если строка). Для \texttt{Int}, \texttt{Double} — количество цифр. Для \texttt{String} — количество букв (a-z, A-Z). Для \texttt{Boolean} — 4 (длина слова "true") или 5 ("false"). Для всех остальных — 0.
+    \item \textbf{toComparableValue}: Вернуть значение, пригодное для сравнения (в виде \texttt{Double}). Для \texttt{Int}, \texttt{Double} — само число. Для \texttt{String} — длину. Для \texttt{Boolean} — 1.0 или 0.0. Для \texttt{List}, \texttt{Array} — размер. Для всех остальных — 0.0.
+    \item \textbf{isValidInput}: Вернуть \texttt{true}, если значение может быть использовано как корректный ввод для калькулятора. Для \texttt{Int}, \texttt{Double} — true. Для \texttt{String}, содержащей число — true. Для \texttt{Boolean} — false. Для всех остальных — false.
+    \item \textbf{toSearchableString}: Вернуть строку, пригодную для поиска (в нижнем регистре, без лишних символов). Для \texttt{String} — в нижнем регистре. Для \texttt{Int}, \texttt{Double} — \texttt{toString().lowercase()}. Для \texttt{Boolean} — "true"/"false". Для \texttt{List} — конкатенация \texttt{toSearchableString} всех элементов через пробел. Для всех остальных — пустая строка.
+    \item \textbf{getHashCode}: Вернуть целочисленный хэш-код (упрощённый). Для \texttt{Int} — само число. Для \texttt{String} — сумму кодов всех символов. Для \texttt{Boolean} — 1 или 0. Для \texttt{List} — сумму хэшей всех элементов. Для всех остальных — 0.
+    \item \textbf{toLogString}: Вернуть строку для логирования в формате "[ТИП] значение". Для \texttt{String} — "[String] значение". Для \texttt{Int} — "[Int] значение". Для \texttt{null} — "[Null] null". Для всех остальных — "[Unknown] тип: неизвестен".
+    \item \textbf{canBeNegative}: Вернуть \texttt{true}, если тип значения теоретически может быть отрицательным. Для \texttt{Int}, \texttt{Double}, \texttt{Long} — true. Для \texttt{String}, \texttt{Boolean}, \texttt{List} — false. Для всех остальных — false.
+    \item \textbf{toPositiveValue}: Вернуть положительное числовое представление. Для \texttt{Int}, \texttt{Double} — модуль числа. Для \texttt{String} — длину. Для \texttt{Boolean} — 1 (true) или 0 (false). Для \texttt{List} — размер. Для всех остальных — 0.
+    \item \textbf{getSummary}: Вернуть краткую сводку. Для \texttt{String} — "Длина: N". Для \texttt{Int} — "Значение: N". Для \texttt{List} — "Элементов: N". Для \texttt{Boolean} — "Значение: true/false". Для всех остальных — "Тип: Unknown".
+    \item \textbf{isNumericType}: Вернуть \texttt{true}, если значение представляет число. Для \texttt{Int}, \texttt{Double}, \texttt{Long} — true. Для \texttt{String}, если можно распарсить как число — true. Для всех остальных — false.
+    \item \textbf{getDefaultName}: Вернуть имя по умолчанию. Для \texttt{String} — само значение. Для \texttt{Int} — "Item\_N". Для \texttt{Boolean} — "Флаг". Для \texttt{List} — "Список\_N\_элементов". Для всех остальных — "Объект".
+    \item \textbf{toIdentifier}: Вернуть строку, пригодную для использования как идентификатор (латинские буквы, цифры, без пробелов). Для \texttt{String} — оставить только a-z, A-Z, 0-9, остальное удалить. Для \texttt{Int} — "id\_N". Для \texttt{Boolean} — "flag\_true"/"flag\_false". Для всех остальных — "unknown\_type".
+    \item \textbf{getByteSizeEstimate}: Вернуть примерный размер в байтах. Для \texttt{Int} — 4. Для \texttt{Double} — 8. Для \texttt{String} — длина * 2. Для \texttt{Boolean} — 1. Для \texttt{List} — сумму размеров элементов + 10. Для всех остальных — 0.
+    \item \textbf{toUserFriendlyString}: Вернуть строку, понятную пользователю. Для \texttt{null} — "Не задано". Для \texttt{String} — само значение. Для \texttt{Int} — форматированное число с разделителями тысяч. Для \texttt{Boolean} — "Да"/"Нет". Для всех остальных — "Системное значение".
+    \item \textbf{isPrimitiveLike}: Вернуть \texttt{true}, если значение похоже на примитив (число, строка, булево). Для \texttt{Int}, \texttt{Double}, \texttt{String}, \texttt{Boolean} — true. Для \texttt{List}, \texttt{Map}, \texttt{Array} — false. Для всех остальных — false.
+    \item \textbf{toSortKey}: Вернуть строку-ключ для сортировки. Для \texttt{String} — в нижнем регистре. Для \texttt{Int}, \texttt{Double} — дополнить нулями до 10 символов. Для \texttt{Boolean} — "0\_false"/"1\_true". Для всех остальных — "z\_unknown".
+    \item \textbf{getDeepSize}: Вернуть "глубину" или сложность структуры. Для \texttt{Int}, \texttt{String}, \texttt{Boolean} — 1. Для \texttt{List}, \texttt{Array} — 1 + максимум \texttt{getDeepSize} элементов. Для всех остальных — 0.
+\end{enumerate}

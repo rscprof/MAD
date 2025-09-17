@@ -5,3 +5,9 @@
 *.out
 *.exe
 old
+*.ods
+*.nav
+*.snm
+*.vrb
+
+swagger*

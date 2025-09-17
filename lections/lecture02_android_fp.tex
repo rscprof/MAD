@@ -1,0 +1,699 @@
+% !TEX program = xelatex % Указываем, что компилятор - XeLaTeX
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+% ---------- Encoding & language (xelatex-friendly) ----------
+\usepackage{polyglossia} % Вместо babel для XeLaTeX
+\setdefaultlanguage{russian}
+\setotherlanguages{english}
+
+\usepackage{fontspec} % Для работы со шрифтами
+\setmainfont{CMU Serif} % Установка основного шрифта (аналог Computer Modern)
+\setsansfont{CMU Sans Serif} % Установка шрифта без засечек
+\setmonofont{CMU Typewriter Text} % Установка моноширинного шрифта
+
+% ---------- Common packages ----------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{ulem}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,shapes.misc}
+
+% ---------- Listings (Kotlin/Java) ----------
+\usepackage{listings} % Используем стандартный listings (inputenc не нужен)
+\usepackage[dvipsnames]{xcolor}
+
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle={\color{gray}\ttfamily},
+  emph={filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println, launch, async, await, withContext, let, run, apply, also, takeIf, takeUnless, repeat, with},
+  emphstyle={\color{OrangeRed}},
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiver, reified, return, return@, sealed, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle={\color{NavyBlue}\bfseries},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  ndkeywords={@Composable, @Preview, @Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing, Pair, Triple},
+  ndkeywordstyle={\color{BurntOrange}\bfseries},
+  sensitive=true,
+  stringstyle={\color{ForestGreen}\ttfamily}
+}
+
+\lstdefinelanguage{JavaLite}{
+  language=Java,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{NavyBlue}\bfseries,
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{ForestGreen}\ttfamily
+}
+
+\lstset{
+  extendedchars=true,
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true,
+  showstringspaces=false,
+  frame=single,
+  framerule=0.2pt,
+  tabsize=2,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=6pt
+}
+
+% ---------- Title ----------
+\title{Функциональный стиль в Kotlin}
+\subtitle{Лекция 2: Коллекции, цепочки вызовов, безопасная обработка, scope-функции и Pair/Triple}
+\author{Александр Глускер}
+\institute{Курс «Мобильная разработка»}
+\date{\today}
+
+% ---------- TOC at section start ----------
+\AtBeginSection[]{
+  \begin{frame}{Навигация по лекции}
+    \tableofcontents[currentsection, hideallsubsections]
+  \end{frame}
+}
+
+\begin{document}
+
+% ================== Title ==================
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ================== Agenda ==================
+\begin{frame}{Содержание}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.55\textwidth}
+      \begin{enumerate}
+        \item Что такое функциональный стиль
+        \item Основные коллекции: List, Set, Map
+        \item Sequence: ленивые вычисления
+        \item Методы коллекций: map, filter, reduce и др.
+        \item Scope-функции: let, run, apply, takeIf
+        \item Безопасная обработка без исключений
+        \item Pair и Triple
+        \item Практические примеры
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Цели лекции}
+        \begin{itemize}
+          \item Научиться писать в функциональном стиле
+          \item Освоить цепочки вызовов без var и mutable коллекций
+          \item Уметь безопасно обрабатывать ошибки
+          \item Подготовиться к семинару
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Что такое функциональный стиль}
+
+\begin{frame}{Функциональный стиль — суть}
+  \begin{itemize}
+    \item \textbf{Функции как объекты первого класса}: можно передавать, возвращать, хранить
+    \item \textbf{Иммутабельность}: данные не изменяются — создаются новые структуры
+    \item \textbf{Чистые функции}: одинаковые входы → одинаковые выходы, без побочных эффектов
+    \item \textbf{Выражения вместо операторов}: почти всё возвращает значение
+    \item \textbf{Декларативность}: описываем \textit{что}, а не \textit{как}
+  \end{itemize}
+  \begin{block}{В Kotlin}
+    Поддержка через лямбды, расширения, стандартную библиотеку коллекций, scope-функции.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Почему функциональный стиль?}
+  \begin{itemize}
+    \item Читаемость: цепочки вызовов выражают намерение
+    \item Безопасность: меньше ошибок, особенно с null и состоянием
+    \item Композируемость: легко комбинировать операции
+    \item Тестируемость: чистые функции проще тестировать
+    \item Поддержка многопоточности: иммутабельность → нет гонок
+  \end{itemize}
+  \begin{block}{Важно}
+    Не догма — Kotlin позволяет смешивать парадигмы. Используйте функциональный стиль там, где он уместен.
+  \end{block}
+\end{frame}
+
+\section{Основные коллекции: List, Set, Map}
+
+\begin{frame}[fragile]{List — упорядоченная коллекция}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val numbers = listOf(1, 2, 3, 4, 5)
+val empty = emptyList<Int>()
+
+// Индексация
+println(numbers[0]) // 1
+
+// Доступ к первому/последнему
+println(numbers.first()) // 1
+println(numbers.last())  // 5
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Set — уникальные элементы без порядка}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val unique = setOf(1, 2, 3, 2, 1) // {1, 2, 3}
+val emptySet = emptySet<Int>()
+
+// Проверка наличия
+println(unique.contains(2)) // true
+println(2 in unique)        // true
+
+// Операции над множествами
+val a = setOf(1, 2, 3)
+val b = setOf(3, 4, 5)
+println(a intersect b) // {3}
+println(a union b)     // {1, 2, 3, 4, 5}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Map — пары ключ-значение}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val map = mapOf("a" to 1, "b" to 2, "c" to 3)
+val emptyMap = emptyMap<String, Int>()
+
+// Получение значения
+println(map["a"])           // 1 (может быть null)
+println(map.getValue("a"))  // 1 (бросит исключение, если нет)
+println(map.getOrDefault("d", 0)) // 0
+
+// Итерация
+map.forEach { (key, value) ->
+    println("$key: $value")
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Sequence: ленивые вычисления}
+
+\begin{frame}[fragile]{Зачем Sequence?}
+  \textbf{Проблема}: при работе с большими коллекциями, каждый вызов map/filter создает промежуточный список.
+  \begin{lstlisting}
+  val result = (1..1000000)
+      .map { it * 2 }     // Создает список из 1M элементов
+      .filter { it > 10 } // Создает еще один список
+      .first()
+  \end{lstlisting}
+
+  \textbf{Решение}: Sequence — ленивая коллекция. Операции выполняются по одной на элемент.
+  \begin{lstlisting}
+  val result = (1..1000000).asSequence()
+      .map { it * 2 }     // Ничего не вычисляется
+      .filter { it > 10 } // Ничего не вычисляется
+      .first()            // Вычисляется только до первого подходящего
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Создание и преобразование Sequence}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+// Создание
+val seq1 = sequenceOf(1, 2, 3)
+val seq2 = (1..10).asSequence()
+
+// Генератор
+val fib = generateSequence(Pair(0, 1)) { (a, b) -> Pair(b, a + b) }
+    .map { it.first }
+    .take(10) // первые 10 чисел Фибоначчи
+
+// Преобразование в коллекцию
+val list = seq1.toList()
+val set = seq1.toSet()
+\end{lstlisting}
+\end{frame}
+
+\section{Методы коллекций: map, filter, reduce и др.}
+
+\begin{frame}[fragile]{map и mapNotNull}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val numbers = listOf(1, 2, 3, 4)
+
+// map: преобразует каждый элемент
+val doubled = numbers.map { it * 2 } // [2, 4, 6, 8]
+
+// mapNotNull: отфильтровывает null после преобразования
+val strings = listOf("1", "a", "3", "b")
+val ints = strings.mapNotNull { it.toIntOrNull() } // [1, 3]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{filter, filterNot, filterTo}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val numbers = listOf(1, 2, 3, 4, 5)
+
+// filter: оставляет, если условие true
+val evens = numbers.filter { it % 2 == 0 } // [2, 4]
+
+// filterNot: оставляет, если условие false
+val odds = numbers.filterNot { it % 2 == 0 } // [1, 3, 5]
+
+// filterTo: записывает результат в существующую коллекцию
+val mutableList = mutableListOf<Int>()
+numbers.filterTo(mutableList) { it > 3 } // mutableList = [4, 5]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{take, drop, takeWhile, dropWhile}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val numbers = listOf(1, 2, 3, 4, 5)
+
+// take: первые N элементов
+println(numbers.take(3)) // [1, 2, 3]
+
+// drop: пропускает первые N
+println(numbers.drop(3)) // [4, 5]
+
+// takeWhile: берет, пока условие true
+println(numbers.takeWhile { it < 4 }) // [1, 2, 3]
+
+// dropWhile: пропускает, пока условие true
+println(numbers.dropWhile { it < 4 }) // [4, 5]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{reduce, fold, sum, maxOrNull}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val numbers = listOf(1, 2, 3, 4)
+
+// reduce: сворачивает список в одно значение (первый элемент — начальный)
+val sum1 = numbers.reduce { acc, n -> acc + n } // 10
+
+// fold: сворачивает с явным начальным значением
+val sum2 = numbers.fold(0) { acc, n -> acc + n } // 10
+
+// sum: сумма чисел
+val sum3 = numbers.sum() // 10
+
+// maxOrNull: максимальный элемент (или null, если пусто)
+val max = numbers.maxOrNull() // 4
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{groupBy, associate, partition}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val words = listOf("a", "bb", "ccc", "dd")
+
+// groupBy: группирует по ключу
+val byLength = words.groupBy { it.length }
+// {1=["a"], 2=["bb", "dd"], 3=["ccc"]}
+
+// associate: создает Map по ключу и значению
+val wordToLength = words.associate { it to it.length }
+// {a=1, bb=2, ccc=3, dd=2}
+
+// partition: разделяет на две части по условию
+val (evens, odds) = numbers.partition { it % 2 == 0 }
+// evens = [2, 4], odds = [1, 3, 5]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{flatMap, flatten}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val lists = listOf(listOf(1, 2), listOf(3, 4), listOf(5))
+
+// flatten: объединяет вложенные списки
+val flat = lists.flatten() // [1, 2, 3, 4, 5]
+
+// flatMap: преобразует каждый элемент в коллекцию и объединяет
+val words = listOf("Hello", "World")
+val chars = words.flatMap { it.toList() } // [H, e, l, l, o, W, o, r, l, d]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{distinct, sorted, sortedBy}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val numbers = listOf(3, 1, 4, 1, 5)
+
+// distinct: уникальные элементы
+val unique = numbers.distinct() // [3, 1, 4, 5]
+
+// sorted: сортировка по возрастанию
+val sorted = numbers.sorted() // [1, 1, 3, 4, 5]
+
+// sortedBy: сортировка по ключу
+val words = listOf("bb", "a", "ccc")
+val byLength = words.sortedBy { it.length } // [a, bb, ccc]
+\end{lstlisting}
+\end{frame}
+
+\section{Scope-функции: let, run, apply, takeIf}
+
+\begin{frame}[fragile]{let: безопасная работа с nullable}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val str: String? = "Hello"
+
+// let выполняется, только если объект не null
+str?.let { 
+    println(it.length) // 5
+    it.uppercase()     // возвращает результат блока
+}
+
+// Часто используется для цепочек
+val result = str?.let { it.uppercase() } ?: "DEFAULT"
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{run: выполнить блок и вернуть результат}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val result = run {
+    val x = 10
+    val y = 20
+    x + y // возвращаемое значение
+}
+println(result) // 30
+
+// Можно вызывать на объекте
+val str = "Hello"
+val length = str.run {
+    println(this) // "Hello"
+    length        // 5
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{apply: конфигурация объекта}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val list = mutableListOf<String>().apply {
+    add("a")
+    add("b")
+    add("c")
+}
+// list = ["a", "b", "c"]
+
+// Часто для инициализации
+val person = Person().apply {
+    name = "Alice"
+    age = 30
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{takeIf и takeUnless: условное продолжение}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val number = 15
+
+// takeIf: возвращает объект, если условие true, иначе null
+val evenOrNull = number.takeIf { it % 2 == 0 } // null
+
+// takeUnless: возвращает объект, если условие false
+val oddOrNull = number.takeUnless { it % 2 == 0 } // 15
+
+// Комбинируем с let
+number.takeIf { it > 10 }
+    ?.let { println("Больше 10: $it") } // "Больше 10: 15"
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{also: побочные эффекты без изменения}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val list = listOf(1, 2, 3).also {
+    println("Список создан: $it") // [1, 2, 3]
+}.map { it * 2 }.also {
+    println("После map: $it") // [2, 4, 6]
+}
+
+// Для логирования в цепочках
+val result = computeSomething()
+    .also { log("Результат: $it") }
+    .process()
+\end{lstlisting}
+\end{frame}
+
+\section{Безопасная обработка без исключений}
+
+\begin{frame}[fragile]{Цепочка обработки с readlnOrNull()}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Введите число:")
+    val number = readlnOrNull()
+        ?.toIntOrNull()              // безопасное преобразование
+        ?.takeIf { it > 0 }          // только положительные
+        ?.let { "Результат: ${it * 2}" } // преобразование в строку
+        ?: "Ошибка: введите положительное число"
+
+    println(number)
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Обработка списка чисел с ошибками}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Введите числа через пробел:")
+    val sum = readlnOrNull()
+        ?.split(" ")                 // разбиваем на части
+        ?.mapNotNull { it.toIntOrNull() } // преобразуем, отфильтровываем null
+        ?.filter { it > 0 }          // только положительные
+        ?.sum()                      // сумма
+        ?.takeIf { it < 1000 }       // проверка переполнения
+        ?: -1                        // ошибка
+
+    if (sum == -1) {
+        println("Ошибка: неверный ввод или сумма >= 1000")
+    } else {
+        println("Сумма: $sum")
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Pair и Triple}
+
+\begin{frame}[fragile]{Pair: пара значений}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val pair = Pair("Hello", 42)
+val (str, num) = pair // деструктуризация
+println(str) // "Hello"
+println(num) // 42
+
+// Синтаксический сахар
+val pair2 = "Hello" to 42
+
+// Часто используется в map
+val map = mapOf("a" to 1, "b" to 2)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Triple: тройка значений}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val triple = Triple("Alice", 30, "Engineer")
+val (name, age, job) = triple
+println("$name, $age, $job") // Alice, 30, Engineer
+
+// Пример: возвращаем несколько значений из функции
+fun getUserInfo(): Triple<String, Int, String> {
+    return Triple("Bob", 25, "Designer")
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Практические примеры}
+\section{Практические примеры}
+
+\begin{frame}[fragile]{Пример 1: Безопасный парсер координат}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Введите: x,y")
+    val point = readlnOrNull()
+        ?.split(",")
+        ?.mapNotNull { it.trim().toDoubleOrNull() }
+        ?.takeIf { it.size == 2 }
+        ?.let { (x, y) -> "Точка: ($x, $y)" }
+        ?: "Ошибка формата"
+    println(point)
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 2: Анализ частотности букв}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Введите текст:")
+    val top3 = readlnOrNull()
+        ?.filter { it.isLetter() }
+        ?.groupingBy { it.lowercaseChar() }
+        ?.eachCount()
+        ?.toList()
+        ?.sortedByDescending { it.second }
+        ?.take(3)
+        ?.joinToString { "${it.first}=${it.second}" }
+        ?: "Нет данных"
+    println("Топ-3 буквы: $top3")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 3: Валидация email-ов}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun isValidEmail(s: String) = s.count { it == '@' } == 1 &&
+    s.split('@').let { it.size == 2 && it[0].isNotEmpty() && '.' in it[1] }
+
+fun main() {
+    println("Email'ы через ;")
+    val valid = readlnOrNull()
+        ?.split(";")
+        ?.map { it.trim() }
+        ?.filter { isValidEmail(it) }
+        ?.ifEmpty { null }
+        ?.joinToString("\n")
+        ?: "Нет валидных email"
+    println(valid)
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 4: Генератор безопасных паролей}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    val chars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    val pwd = (1..12).map { chars.random() }
+        .joinToString("")
+        .let { p -> if (p.any { it.isDigit() }) p else "Ошибка генерации" }
+    println("Пароль: $pwd")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 5: Калькулятор выражений}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun eval(expr: String): Double? = try {
+    val tokens = expr.split(" ")
+    tokens.chunked(3).fold(tokens[0].toDouble()) { acc, part ->
+        when (part[1]) {
+            "+" -> acc + part[2].toDouble()
+            "-" -> acc - part[2].toDouble()
+            "*" -> acc * part[2].toDouble()
+            "/" -> acc / part[2].toDouble()
+            else -> return null
+        }
+    }
+} catch (_: Exception) { null }
+
+fun main() {
+    println("Введите: a op b op c ...")
+    val result = readlnOrNull()?.let(::eval)?.takeIf { it.isFinite() }
+    println("Результат: ${result ?: "Ошибка"}")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 6: Анализ зависимостей}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Зависимости: A->B; B->C; ...")
+    val deps = readlnOrNull()
+        ?.split(";")
+        ?.mapNotNull { it.split("->").takeIf { p -> p.size == 2 } }
+        ?.associate { it[0].trim() to it[1].trim() }
+        ?.let { map ->
+            map.keys.filter { it !in map.values }
+                .ifEmpty { listOf("Цикл!") }
+                .joinToString()
+        } ?: "Нет входных данных"
+    println("Корневые: $deps")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 7: Преобразование единиц измерения}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+val units = mapOf("km" to 1000.0, "m" to 1.0, "cm" to 0.01, "mm" to 0.001)
+
+fun main() {
+    println("Введите: значение единица_из -> единица_в")
+    val result = readlnOrNull()
+        ?.split(" ")
+        ?.let { (v, from, _, to) ->
+            (v.toDoubleOrNull() ?: return@let null) *
+            (units[from] ?: return@let null) /
+            (units[to] ?: return@let null)
+        }
+        ?.takeIf { it.isFinite() && it > 0 }
+        ?.let { "%.2f".format(it) }
+        ?: "Ошибка конвертации"
+    println("Результат: $result")
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Пример 8: Построение маршрута}
+\lstset{language=Kotlin}
+\begin{lstlisting}
+fun main() {
+    println("Маршрут: A-B, B-C, C-D")
+    val path = readlnOrNull()
+        ?.split(", ")
+        ?.map { it.split("-").takeIf { p -> p.size == 2 } }
+        ?.filterNotNull()
+        ?.fold("") { acc, (from, to) ->
+            if (acc.isEmpty() || acc.last() == from[0]) acc + to[0]
+            else return@fold "" // разрыв маршрута
+        }
+        ?.takeIf { it.length > 1 }
+        ?: "Невалидный маршрут"
+    println("Путь: $path")
+}
+\end{lstlisting}
+\end{frame}
+\section{Резюме}
+
+\begin{frame}{Итоги лекции}
+  \begin{itemize}
+    \item Функциональный стиль — это иммутабельность, чистые функции, выражения
+    \item List, Set, Map — основные коллекции; Sequence — для ленивых вычислений
+    \item Основные методы: map, filter, reduce, groupBy, sorted, take, drop и др.
+    \item Scope-функции: let, run, apply, takeIf — для безопасной и читаемой работы с объектами
+    \item Безопасная обработка: цепочки с ?. и ?: вместо try-catch
+    \item Pair и Triple — для возврата нескольких значений
+    \item Все примеры решены без var и mutable коллекций — как требуется на семинаре
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Советы для семинара}
+  \begin{itemize}
+    \item Начинайте с readlnOrNull() — это ваша точка входа
+    \item Используйте ?. для безопасного доступа, ?: для значения по умолчанию
+    \item Разбивайте сложные цепочки на логические блоки (даже если пишете в одну строку)
+    \item Тестируйте на граничных случаях: пустой ввод, null, ноль, отрицательные числа
+    \item Помните: в Kotlin почти всё — выражение. Используйте это!
+  \end{itemize}
+  \centering
+  \Large Удачи на семинаре!
+\end{frame}
+
+\end{document}

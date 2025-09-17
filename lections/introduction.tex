@@ -1,0 +1,319 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+
+% From https://github.com/cansik/kotlin-latex-listing/blob/master/example/kotlin_def.tex
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle={\color{gray}\ttfamily},
+  emph={filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println},
+  emphstyle={\color{OrangeRed}},
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiver, reified, return, return@, sealed, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle={\color{NavyBlue}\bfseries},
+  escapeinside={//(`}{`)},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  ndkeywords={@Composable, @Preview, @Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing},
+  ndkeywordstyle={\color{BurntOrange}\bfseries},
+  sensitive=true,
+  stringstyle={\color{ForestGreen}\ttfamily}
+}
+
+\lstset{
+  language=Kotlin,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  breaklines=true,
+  showstringspaces=false,
+  	literate={а}{{\selectfont\char224}}1
+             {б}{{\selectfont\char225}}1
+             {в}{{\selectfont\char226}}1
+             {г}{{\selectfont\char227}}1
+             {д}{{\selectfont\char228}}1
+             {е}{{\selectfont\char229}}1
+             {ё}{{\"e}}1
+             {ж}{{\selectfont\char230}}1
+             {з}{{\selectfont\char231}}1
+             {и}{{\selectfont\char232}}1
+             {й}{{\selectfont\char233}}1
+             {к}{{\selectfont\char234}}1
+             {л}{{\selectfont\char235}}1
+             {м}{{\selectfont\char236}}1
+             {н}{{\selectfont\char237}}1
+             {о}{{\selectfont\char238}}1
+             {п}{{\selectfont\char239}}1
+             {р}{{\selectfont\char240}}1
+             {с}{{\selectfont\char241}}1
+             {т}{{\selectfont\char242}}1
+             {у}{{\selectfont\char243}}1
+             {ф}{{\selectfont\char244}}1
+             {х}{{\selectfont\char245}}1
+             {ц}{{\selectfont\char246}}1
+             {ч}{{\selectfont\char247}}1
+             {ш}{{\selectfont\char248}}1
+             {щ}{{\selectfont\char249}}1
+             {ъ}{{\selectfont\char250}}1
+             {ы}{{\selectfont\char251}}1
+             {ь}{{\selectfont\char252}}1
+             {э}{{\selectfont\char253}}1
+             {ю}{{\selectfont\char254}}1
+             {я}{{\selectfont\char255}}1
+             {А}{{\selectfont\char192}}1
+             {Б}{{\selectfont\char193}}1
+             {В}{{\selectfont\char194}}1
+             {Г}{{\selectfont\char195}}1
+             {Д}{{\selectfont\char196}}1
+             {Е}{{\selectfont\char197}}1
+             {Ё}{{\"E}}1
+             {Ж}{{\selectfont\char198}}1
+             {З}{{\selectfont\char199}}1
+             {И}{{\selectfont\char200}}1
+             {Й}{{\selectfont\char201}}1
+             {К}{{\selectfont\char202}}1
+             {Л}{{\selectfont\char203}}1
+             {М}{{\selectfont\char204}}1
+             {Н}{{\selectfont\char205}}1
+             {О}{{\selectfont\char206}}1
+             {П}{{\selectfont\char207}}1
+             {Р}{{\selectfont\char208}}1
+             {С}{{\selectfont\char209}}1
+             {Т}{{\selectfont\char210}}1
+             {У}{{\selectfont\char211}}1
+             {Ф}{{\selectfont\char212}}1
+             {Х}{{\selectfont\char213}}1
+             {Ц}{{\selectfont\char214}}1
+             {Ч}{{\selectfont\char215}}1
+             {Ш}{{\selectfont\char216}}1
+             {Щ}{{\selectfont\char217}}1
+             {Ъ}{{\selectfont\char218}}1
+             {Ы}{{\selectfont\char219}}1
+             {Ь}{{\selectfont\char220}}1
+             {Э}{{\selectfont\char221}}1
+             {Ю}{{\selectfont\char222}}1
+             {Я}{{\selectfont\char223}}1
+}
+
+\title{Введение в мобильную разработку (Android/Kotlin)}
+\subtitle{Лекция 1: Обзор способов создания мобильных приложений, экзамен и обзор Kotlin}
+\author{Ваш Имя}
+\institute{Ваш Университет}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Содержание}
+  \tableofcontents
+\end{frame}
+
+\section{Введение в курс}
+
+\begin{frame}{Добро пожаловать!}
+  \begin{itemize}
+    \item Добро пожаловать на курс "Мобильная разработка (Android/Kotlin)".
+    \item В этом курсе мы изучим основы создания приложений для Android с использованием Kotlin.
+    \item Цели курса:
+      \begin{itemize}
+        \item Понять принципы мобильной разработки.
+        \item Освоить Kotlin как основной язык.
+        \item Разработать простые приложения.
+      \end{itemize}
+    \item Мы также обсудим альтернативные подходы к мобильной разработке.
+  \end{itemize}
+\end{frame}
+
+\section{Обзор способов создания мобильных приложений}
+
+\begin{frame}{Способы создания мобильных приложений}
+  Существует множество подходов к разработке мобильных приложений. Мы рассмотрим основные категории:
+  \begin{itemize}
+    \item Нативная разработка.
+    \item Кросс-платформенная разработка.
+    \item Гибридная разработка.
+    \item Progressive Web Apps (PWA).
+    \item No-code/Low-code платформы.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Нативная разработка}
+  \begin{itemize}
+    \item Разработка под конкретную платформу.
+    \item Android: Kotlin или Java с Android Studio.
+    \item iOS: Swift или Objective-C с Xcode.
+    \item Преимущества: Максимальная производительность, полный доступ к API устройства.
+    \item Недостатки: Нужно разрабатывать отдельно для каждой платформы, что увеличивает время и стоимость.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Кросс-платформенная разработка}
+  \begin{itemize}
+    \item Один код для нескольких платформ.
+    \item Примеры:
+      \begin{itemize}
+        \item Flutter (Dart) от Google.
+        \item React Native (JavaScript) от Facebook.
+        \item Xamarin/.NET MAUI (C\#) от Microsoft.
+        \item Kotlin Multiplatform (KMP) для Android/iOS.
+      \end{itemize}
+    \item Преимущества: Экономия времени, общий код.
+    \item Недостатки: Могут быть ограничения в производительности или доступе к нативным функциям.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Гибридная разработка}
+  \begin{itemize}
+    \item Приложения на основе веб-технологий (HTML, CSS, JS), упакованные в нативный контейнер.
+    \item Примеры: Ionic, Apache Cordova, PhoneGap.
+    \item Преимущества: Легко использовать веб-навыки, быстрое прототипирование.
+    \item Недостатки: Ниже производительность по сравнению с нативными, проблемы с UI/UX.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Progressive Web Apps (PWA)}
+  \begin{itemize}
+    \item Веб-приложения, которые выглядят и работают как нативные.
+    \item Технологии: Service Workers, Manifest.json.
+    \item Преимущества: Кросс-платформенные, не требуют установки из stores.
+    \item Недостатки: Ограниченный доступ к аппаратным функциям, зависимость от браузера.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{No-code/Low-code платформы}
+  \begin{itemize}
+    \item Разработка без/с минимальным кодом.
+    \item Примеры: Adalo, Bubble, AppGyver, Glide.
+    \item Преимущества: Быстрое создание MVP, доступно для не-программистов.
+    \item Недостатки: Ограниченная кастомизация, зависимость от платформы.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Выбор подхода}
+  \begin{itemize}
+    \item Зависит от проекта: бюджет, сроки, требования к производительности.
+    \item В этом курсе фокус на нативной Android с Kotlin, но знание альтернатив полезно.
+  \end{itemize}
+\end{frame}
+
+\section{Обзор возможностей Kotlin}
+
+\begin{frame}{Что такое Kotlin?}
+  \begin{itemize}
+    \item Современный, статически типизированный язык программирования.
+    \item Разработан JetBrains в 2011 году, официально поддерживается Google для Android с 2017.
+    \item Полностью interoperable с Java.
+    \item Ключевые принципы: Концизность, безопасность, практичность.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ключевые особенности Kotlin}
+  \begin{itemize}
+    \item Null-safety: Избегание NullPointerException с помощью ? и !!.
+    \item Coroutines: Асинхронное программирование без callback-hell.
+    \item Extension functions: Добавление методов к существующим классам.
+    \item Data classes: Автоматическая генерация equals(), hashCode(), toString().
+    \item Lambdas и higher-order functions: Функциональное программирование.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Пример кода: Hello World в Kotlin}[fragile]
+  \begin{lstlisting}
+fun main() {
+    println("Hello, World!")
+}
+  \end{lstlisting}
+  Сравните с Java: Меньше boilerplate.
+\end{frame}
+
+\begin{frame}{Пример: Null-safety}[fragile]
+  \begin{lstlisting}
+var name: String? = null  // Может быть null
+println(name?.length)     // Безопасный вызов, вернет null если name null
+println(name!!.length)    // Уверены, что не null, иначе exception
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Почему Kotlin для Android?}
+  \begin{itemize}
+    \item Более выразительный и безопасный, чем Java.
+    \item Упрощает разработку: Меньше кода, меньше ошибок.
+    \item Поддержка от Google: Android Jetpack, KTX расширения.
+    \item Сообщество: Активное, много библиотек.
+  \end{itemize}
+\end{frame}
+
+\section{Экзамен и полусеместровый контроль}
+
+\begin{frame}{Структура курса}
+  \begin{itemize}
+    \item Лекции: Теория и обзоры.
+    \item Практики: Разработка приложений.
+    \item Домашние задания: Маленькие проекты.
+    \item Полусеместровый контроль: Midway оценка.
+    \item Финальный экзамен.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Полусеместровый контроль}
+  \begin{itemize}
+    \item Проходит в середине семестра (примерно 7-8 неделя).
+    \item Формат: Тест или мини-проект по пройденным темам (основы Kotlin, простые Android компоненты).
+    \item Оценка: Зачет/незачет или баллы, влияющие на финальную оценку.
+    \item Подготовка: Регулярно посещайте лекции и практики, выполняйте ДЗ.
+    \item Если не сдали: Возможна пересдача до конца семестра.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Финальный экзамен}
+  \begin{itemize}
+    \item Проходит в конце семестра.
+    \item Формат: Теоретические вопросы + практическая часть (разработка приложения).
+    \item Темы: Всё пройденное, включая Kotlin, Android архитектуру, альтернативные подходы.
+    \item Оценка: По шкале (например, 5-балльной). Минимальный проходной балл - 3.
+    \item Подготовка: Изучите конспекты, практикуйтесь в кодинге, решайте примеры.
+    \item Пересдача: В соответствии с правилами университета.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Советы по успеху}
+  \begin{itemize}
+    \item Посещайте все занятия.
+    \item Выполняйте задания вовремя.
+    \item Задавайте вопросы, если что-то непонятно.
+    \item Практикуйтесь самостоятельно: Создавайте свои приложения.
+    \item Экзамен - это не страшно, если вы готовы!
+  \end{itemize}
+\end{frame}
+
+\section{Заключение}
+
+\begin{frame}{Заключение}
+  \begin{itemize}
+    \item Сегодня мы обзорно рассмотрели способы мобильной разработки.
+    \item Познакомились с Kotlin и его возможностями.
+    \item Обсудили, как проходит контроль и экзамен.
+    \item На следующей лекции: Установка Android Studio и первый проект.
+  \end{itemize}
+  Вопросы?
+\end{frame}
+
+\begin{frame}{Спасибо за внимание!}
+  \centering
+  \Large{Спасибо за внимание!}\\
+  \vspace{1cm}
+  Вопросы?
+\end{frame}
+
+\end{document}
