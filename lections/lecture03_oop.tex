@@ -1,0 +1,425 @@
+% !TEX program = xelatex % Указываем, что компилятор - XeLaTeX
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+
+% после \usetheme{...}
+\setbeamersize{text margin left=15pt,text margin right=15pt}
+
+
+% ставим размер для записей оглавления
+\setbeamerfont{section in toc}{size=\scriptsize}
+\setbeamerfont{subsection in toc}{size=\scriptsize}
+\setbeamerfont{subsubsection in toc}{size=\scriptsize}
+
+% уменьшаем нумерацию/проектированные номера, если они великоваты
+\setbeamerfont{section number projected}{size=\scriptsize}
+\setbeamerfont{subsection number projected}{size=\scriptsize}
+
+% если пункты выглядят как itemize в ToC
+\setbeamerfont{itemize/enumerate body}{size=\scriptsize}
+
+
+% Уменьшаем отступ для section в оглавлении
+\setbeamertemplate{section in toc}[circle] % стандартный кружок
+%\setbeamertemplate{section in toc}[square] % можно заменить на квадрат
+\setlength{\leftmargini}{0.5em} % уменьшение отступа для itemize в toc
+\setlength{\labelsep}{0.5em}    % расстояние между маркером и текстом
+
+\usecolortheme{beaver}
+
+% ---------- Encoding & language (xelatex-friendly) ----------
+\usepackage{polyglossia} % Вместо babel для XeLaTeX
+\setmainlanguage{russian}
+\setotherlanguage{english}
+
+\usepackage{fontspec} % Для работы со шрифтами
+\setmainfont{CMU Serif} % Установка основного шрифта (аналог Computer Modern)
+\setsansfont{CMU Sans Serif} % Установка шрифта без засечек
+\setmonofont{CMU Typewriter Text} % Установка моноширинного шрифта
+
+% ---------- Common packages ----------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{ulem}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,shapes.misc}
+
+% ---------- Listings (Kotlin/Java) ----------
+\usepackage{listings} % Используем стандартный listings (inputenc не нужен)
+\usepackage[dvipsnames]{xcolor}
+
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle={\color{gray}\ttfamily},
+  emph={filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println, launch, async, await, withContext, let, run, apply, also, takeIf, takeUnless, repeat, with},
+  emphstyle={\color{OrangeRed}},
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiver, reified, return, sealed, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle={\color{NavyBlue}\bfseries},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  ndkeywords={@Composable, @Preview, @Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing, Pair, Triple},
+  ndkeywordstyle={\color{BurntOrange}\bfseries},
+  sensitive=true,
+  stringstyle={\color{ForestGreen}\ttfamily},
+   keepspaces=true,       % сохраняет пробелы
+    columns=flexible       % лучше работает с моноширинными шрифтами
+}
+
+\lstdefinelanguage{JavaLite}{
+  language=Java,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{NavyBlue}\bfseries,
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{ForestGreen}\ttfamily
+}
+
+\lstset{
+  extendedchars=true,
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true,
+  showstringspaces=false,
+  frame=single,
+  framerule=0.2pt,
+  tabsize=2,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=6pt
+}
+
+% ---------- Title ----------
+\title{Объектно-ориентированное программирование в Kotlin}
+\subtitle{Лекция}
+\author{Александр Глускер}
+\institute{Курс «Мобильная разработка»}
+\date{\today}
+
+
+
+
+% ---------- TOC at section start ----------
+\AtBeginSection[]{
+  \begin{frame}{Навигация по лекции}
+    \hspace*{12pt}
+    { \tiny
+    \tableofcontents[currentsection, hideallsubsections]
+    }
+  \end{frame}
+}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\begin{frame}{Навигация по лекции}
+%  \tableofcontents[hideallsubsections]
+%\end{frame}
+
+\section{Классы, объекты и конструкторы}
+
+\begin{frame}[fragile]{Классы и объекты}
+  \begin{lstlisting}[language=Kotlin]
+// Определение класса
+class Person(val name: String, var age: Int)
+
+// Создание объекта
+val person = Person("Alice", 30)
+println(person.name) // Alice
+person.age = 31
+  \end{lstlisting}
+  \begin{itemize}
+    \item Класс — шаблон для создания объектов.
+    \item \texttt{val} — свойство только для чтения, \texttt{var} — изменяемое.
+    \item Первичный конструктор объявляется в заголовке класса.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Первичный и вторичный конструкторы}
+  \begin{lstlisting}[language=Kotlin]
+class Person(val name: String) {
+  var age: Int = 0
+
+  // Вторичный конструктор
+  constructor(name: String, age: Int) : this(name) {
+    this.age = age
+  }
+}
+
+val p1 = Person("Bob")          // первичный
+val p2 = Person("Bob", 25)      // вторичный
+  \end{lstlisting}
+  \begin{itemize}
+    \item Первичный конструктор — часть заголовка класса.
+    \item Вторичные конструкторы должны делегировать вызов первичному (\texttt{this(...)}).
+  \end{itemize}
+\end{frame}
+
+\section{Свойства и функции}
+
+\begin{frame}[fragile]{Свойства с кастомными get/set}
+  \begin{lstlisting}[language=Kotlin]
+class Temperature {
+  var celsius: Double = 0.0
+    set(value) {
+      field = if (value < -273.15) -273.15 else value
+    }
+    get() {
+      println("Доступ к температуре")
+      return field
+    }
+}
+  \end{lstlisting}
+  \begin{itemize}
+    \item \texttt{field} — резервное поле, автоматически создаётся при наличии кастомного геттера/сеттера.
+    \item Геттер/сеттер вызываются при каждом доступе к свойству.
+  \end{itemize}
+\end{frame}
+
+\section{Вложенные и внутренние классы}
+
+\begin{frame}[fragile]{Nested и Inner классы}
+  \begin{lstlisting}[language=Kotlin]
+class Outer {
+  private val bar = 1
+
+  class Nested {  // nested (статический по умолчанию)
+    fun foo() = 2
+  }
+
+  inner class Inner {  // inner — имеет доступ к внешнему классу
+    fun foo() = bar
+  }
+}
+
+val nested = Outer.Nested().foo() // OK
+val inner = Outer().Inner().foo() // OK
+  \end{lstlisting}
+\end{frame}
+
+\section{Абстрактные классы и наследование}
+
+\begin{frame}[fragile]{Абстрактные классы и наследование}
+  \begin{lstlisting}[language=Kotlin]
+abstract class Animal {
+  abstract fun makeSound()
+  open fun sleep() = println("Zzz")
+}
+
+class Dog : Animal() {
+  override fun makeSound() = println("Woof!")
+  override fun sleep() = println("Dog is sleeping")
+}
+  \end{lstlisting}
+  \begin{itemize}
+    \item По умолчанию классы и методы \texttt{final} — нельзя наследовать/переопределять.
+    \item Чтобы разрешить — использовать \texttt{open} или \texttt{abstract}.
+    \item \texttt{abstract} методы не имеют реализации.
+  \end{itemize}
+\end{frame}
+
+\section{Companion objects и константы}
+
+\begin{frame}[fragile]{Companion objects}
+  \begin{lstlisting}[language=Kotlin]
+class MathUtils {
+  companion object {
+    const val PI = 3.14159
+    fun double(x: Int) = x * 2
+  }
+}
+
+// Использование как статические члены
+println(MathUtils.PI)
+println(MathUtils.double(5))
+  \end{lstlisting}
+  \begin{itemize}
+    \item \texttt{companion object} — замена статическим методам/полям.
+    \item \texttt{const val} — compile-time константа (только примитивы и строки).
+  \end{itemize}
+\end{frame}
+
+\section{Интерфейсы}
+
+\begin{frame}[fragile]{Интерфейсы}
+  \begin{lstlisting}[language=Kotlin]
+interface Flyable {
+  fun fly()
+  fun land() = println("Landed") // default implementation
+}
+
+class Bird : Flyable {
+  override fun fly() = println("Flying!")
+}
+
+val bird = Bird()
+bird.fly()
+bird.land()
+  \end{lstlisting}
+  \begin{itemize}
+    \item Интерфейсы могут содержать реализацию по умолчанию.
+    \item Нет множественного наследования классов, но можно реализовать несколько интерфейсов.
+  \end{itemize}
+\end{frame}
+
+\section{Области видимости}
+
+\begin{frame}[fragile]{Области видимости}
+  \begin{itemize}
+    \item \texttt{private} — только в этом классе.
+    \item \texttt{protected} — в этом классе и подклассах.
+    \item \texttt{internal} — в пределах модуля (аналог package-private в Java).
+    \item \texttt{public} — по умолчанию, видно везде.
+  \end{itemize}
+  \begin{lstlisting}[language=Kotlin]
+class Example {
+  private fun secret() = "hidden"
+  internal fun moduleOnly() = "visible in module"
+}
+  \end{lstlisting}
+\end{frame}
+
+\section{Lateinit и делегированные свойства}
+
+\begin{frame}[fragile]{Lateinit}
+  \begin{lstlisting}[language=Kotlin]
+class MyActivity {
+  lateinit var adapter: RecyclerView.Adapter<*>
+
+  fun onCreate() {
+    adapter = MyAdapter()
+  }
+
+  fun useAdapter() {
+    if (::adapter.isInitialized) {
+      // безопасное использование
+    }
+  }
+}
+  \end{lstlisting}
+  \begin{itemize}
+    \item \texttt{lateinit} — откладывает инициализацию \texttt{var}-свойства.
+    \item Только для \texttt{var}, не-nullable типов, не примитивов.
+    \item Проверка инициализации: \texttt{::prop.isInitialized}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Делегированные свойства}
+  \begin{lstlisting}[language=Kotlin]
+import kotlin.properties.Delegates
+
+class Example {
+  val lazyValue: String by lazy {
+    println("Вычисляется один раз!")
+    "Hello"
+  }
+
+  var observableValue: Int by Delegates.observable(0) { _, old, new ->
+    println("Изменено с $old на $new")
+  }
+}
+
+val e = Example()
+println(e.lazyValue) // "Вычисляется один раз!" → "Hello"
+e.observableValue = 42 // "Изменено с 0 на 42"
+  \end{lstlisting}
+\end{frame}
+
+\section{SAM-интерфейсы и extension}
+
+\begin{frame}[fragile]{SAM-интерфейсы}
+  \begin{lstlisting}[language=Kotlin]
+fun interface OnClickListener {
+  fun onClick()
+}
+
+// Использование лямбды вместо анонимного класса
+button.setOnClickListener { println("Clicked!") }
+  \end{lstlisting}
+  \begin{itemize}
+    \item SAM (Single Abstract Method) — интерфейс с одним абстрактным методом.
+    \item Позволяет передавать лямбду вместо реализации.
+    \item Объявляется с \texttt{fun interface}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Extension-функции и свойства}
+  \begin{lstlisting}[language=Kotlin]
+fun String.lastChar(): Char = this[this.length - 1]
+
+val str = "Kotlin"
+println(str.lastChar()) // 'n'
+
+// Extension-свойство
+val String.isLong: Boolean
+  get() = length > 10
+  \end{lstlisting}
+  \begin{itemize}
+    \item Расширяют функциональность существующих типов без наследования.
+    \item Компилируются в статические утилитарные методы.
+  \end{itemize}
+\end{frame}
+
+\section{Data, sealed и enum классы}
+
+\begin{frame}[fragile]{Data классы}
+  \begin{lstlisting}[language=Kotlin]
+data class User(val name: String, val id: Int)
+
+val user1 = User("Alice", 1)
+val user2 = user1.copy(name = "Bob")
+println(user1 == user2) // false
+println(user1) // User(name=Alice, id=1)
+  \end{lstlisting}
+  \begin{itemize}
+    \item Автоматически генерируют \texttt{equals()}, \texttt{hashCode()}, \texttt{toString()}, \texttt{copy()}.
+    \item Все свойства в первичном конструкторе участвуют в сравнении.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Sealed классы}
+  \begin{lstlisting}[language=Kotlin]
+sealed class Result
+data class Success(val data: String) : Result()
+data class Error(val message: String) : Result()
+
+fun handle(result: Result) = when(result) {
+  is Success -> println("Data: ${result.data}")
+  is Error -> println("Error: ${result.message}")
+}
+  \end{lstlisting}
+  \begin{itemize}
+    \item Ограниченное наследование: подклассы должны быть в том же файле.
+    \item Идеальны для моделирования закрытых множеств состояний.
+    \item Безопасны в \texttt{when} — компилятор проверяет полноту.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Enum классы}
+  \begin{lstlisting}[language=Kotlin]
+enum class Color(val rgb: Int) {
+  RED(0xFF0000),
+  GREEN(0x00FF00),
+  BLUE(0x0000FF);
+
+  fun printInfo() = println("$name = $rgb")
+}
+
+Color.RED.printInfo() // RED = 16711680
+for (c in Color.values()) println(c)
+  \end{lstlisting}
+  \begin{itemize}
+    \item Каждая константа — объект enum-класса.
+    \item Можно добавлять свойства и методы.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Спасибо за внимание!}
+  \centering
+  \Large Вопросы?
+\end{frame}
+
+\end{document}
