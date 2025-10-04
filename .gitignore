@@ -9,5 +9,5 @@ old
 *.nav
 *.snm
 *.vrb
-
-swagger*
+.~*
+swagger*/*
