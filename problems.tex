@@ -109,9 +109,9 @@
     \vspace*{\fill}
     \centering
 
-    \Large Сборник заданий для семинарских занятий \\
+    \Large Сборник заданий для практических занятий \\
     по курсу \\
-    <<Разработка мобильных приложений>> \\
+    <<Разработка мобильных приложений>> (МГПУ) \\
     \large
     \vspace{40pt}
     \vspace*{\fill}
@@ -123,47 +123,39 @@
 
 \section{Общие сведения}
 
-Сборник содержит задания для семинарских занятий по курсу <<Разработка мобильных приложений>>.
+Сборник содержит задания для практических занятий по курсу <<Разработка мобильных приложений>>.
 
-Задачник рассчитан на 48 часов семинарских занятий.
+Лекции проходят в форме мастер-классов, соответственно практические занятия состоят в реализации
+заданий, которые повторяют по структуре работы, разобранные на мастер-классах.
 
-Структурно курс делится на две части:
-\begin{enumerate}
-    \item изучение языка Kotlin;
-    \item изучение разработки на платформе Android.
-\end{enumerate}
-
-В практических и лабораторных работах предполагается использование языка Kotlin в средах
-IntelliJ IDEA и Android Studio. При этом необходимо соблюдать
-\href{https://kotlinlang.org/docs/reference/coding-conventions.html}{Coding Conventions} (требования к стилю кода).
+В практических и лабораторных работах предполагается использование языка Kotlin в среде
+Android Studio. При этом необходимо соблюдать
+\href{https://kotlinlang.org/docs/reference/coding-conventions.html}{Coding Conventions} 
+(требования к стилю кода).
 
 Перед сдачей работы добейтесь, чтобы среда не выдавала предупреждений
 при запуске подпункта \textbf{Inspect Code} пункта меню \textbf{Analyze}.
 
-Задачи в большей степени рассчитаны на освоение возможностей языка, а не
-на алгоритмические сложности, поэтому
-осуществляйте написание кода в соответствии с заданием, а не с целью, чтобы
-он просто работал.
 
 Обратите внимание на то, что во всех заданиях необходимо проверять корректность входных данных: программа не должна <<падать>>
 ни в каких ситуациях.
 
-\section{Язык Kotlin}
+\section{Практические задания}
 
-\include{problem_kotlin_start.tex}
+%\include{problem_kotlin_start.tex}
 %\include{problems_kotlin_array.tex}
 %\include{problem_kotlin_string.tex}
 
-\include{problem_kotlin_functions.tex}
+%\include{problem_kotlin_functions.tex}
 
-\include{problem_kotlin_when.tex}
+%\include{problem_kotlin_when.tex}
 
-\include{problem_kotlin_functional_programming.tex}
+%\include{problem_kotlin_functional_programming.tex}
 
-\include{problem_kotlin_when_two.tex}
+%\include{problem_kotlin_when_two.tex}
 
-\include{problem_kotlin_oop.tex}
-\include{problem_kotlin_delegate.tex}
+%\include{problem_kotlin_oop.tex}
+%\include{problem_kotlin_delegate.tex}
 
 % \include{problem_kotlin_operators_overloading.tex}
 % \include{problem_kotlin_generic.tex}
@@ -173,7 +165,13 @@ IntelliJ IDEA и Android Studio. При этом необходимо соблю
 % \section{Разработка на языке Kotlin для платформы Android}
 
 % \include{lab_android_first.tex}
-% \include{problem_android_first.tex}
+\include{problem_android_first.tex}
+\include{problem_android_mvvm.tex}
+\include{problem_android_lazylist.tex}
+\include{problem_android_room.tex}
+
+
+
 % %\include{problem_android_first_compose.tex}
 % \include{problem_android_background.tex}
 
@@ -185,13 +183,11 @@ IntelliJ IDEA и Android Studio. При этом необходимо соблю
 % %\include{lab_android_profile.tex}
 % %\include{problem_android_optimize.tex}
 
-% \include{problem_android_room.tex}
 
 % \include{problem_android_rest.tex}
 
 % \include{problem_android_autotest.tex}
 
-% \include{problem_android_mvvm.tex}
 % \include{problem_android_repository.tex}
 % \include{problem_android_DI.tex}
 
