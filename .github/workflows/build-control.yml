@@ -1,0 +1,52 @@
+name: Build and publish PDF to RUT branch
+
+on:
+  push:
+    branches:
+      - RUT
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic
+
+      - name: Generate LaTeX in cw directory
+        working-directory: cw
+        run: |
+          python generate_latex.py
+          pdflatex -interaction=nonstopmode output.tex
+
+      - name: Commit PDF to RUT branch
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin pages || true
+          if git show-ref --verify --quiet refs/remotes/origin/pages; then
+            git checkout pages
+          else
+            git checkout --orphan pages
+          fi
+
+          mkdir -p RUT
+          cp cw/output.pdf RUT/control.pdf
+
+          git add RUT/control.pdf
+          git commit -m "Update control.pdf from latest build" || echo "No changes to commit"
+          git push origin pages
