@@ -1,37 +1,51 @@
-name: Build LaTeX document from RUT
+name: Build and Publish LaTeX Document
+
 on:
   push:
     branches:
       - RUT
 
 jobs:
-  build_latex:
+  build_and_publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          fetch-depth: 0
+          python-version: '3.13'
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install LaTeX
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic
+          python -m pip install --upgrade pip
+          # Если есть зависимости для generate_latex.py, укажи их здесь
+          # pip install -r cw/requirements.txt
 
-      - name: Generate LaTeX PDF
-        shell: bash
+      - name: Generate LaTeX
+        working-directory: cw
         run: |
-          cd cw
           python generate_latex.py
-          pdflatex -interaction=nonstopmode output.tex
 
-      - name: Prepare dist directory
-        shell: bash
+      - name: Compile LaTeX
+        working-directory: cw
+        run: |
+          if [ ! -f output.tex ]; then
+            echo "Error: output.tex not found"
+            exit 1
+          fi
+
+          for i in 1 2 3; do
+            pdflatex -interaction=nonstopmode output.tex
+          done
+
+          if [ ! -f output.pdf ]; then
+            echo "Error: output.pdf not found"
+            exit 1
+          fi
+
+      - name: Prepare distribution folder
         run: |
           mkdir -p dist/RUT
           cp cw/output.pdf dist/RUT/control.pdf
