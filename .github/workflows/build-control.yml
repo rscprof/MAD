@@ -20,7 +20,7 @@ jobs:
       - name: Install LaTeX
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex
+          sudo apt-get install -y texlive-latex-base  texlive-lang-cyrillic texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex
 
       - name: Install Python dependencies
         run: |
