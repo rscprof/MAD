@@ -48,5 +48,5 @@ jobs:
           cp cw/output.pdf RUT/control.pdf
 
           git add -f RUT/control.pdf
-          git commit -fm "Update control.pdf from latest build" || echo "No changes to commit"
+          git commit -m "Update control.pdf from latest build" || echo "No changes to commit"
           git push origin pages
