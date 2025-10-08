@@ -5,15 +5,9 @@ on:
     branches:
       - RUT
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
-    environment: github-pages  # Required for deploy-pages action
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -47,7 +41,7 @@ jobs:
           fi
 
           for i in 1 2 3; do
-            xelatex -interaction=nonstopmode output.tex
+            pdflatex -interaction=nonstopmode output.tex
           done
 
           if [ ! -f output.pdf ]; then
@@ -55,15 +49,23 @@ jobs:
             exit 1
           fi
 
+      - name: Debug file presence
+        run: |
+          ls -la cw
+          if [ -f cw/output.pdf ]; then
+            echo "output.pdf exists"
+          else
+            echo "output.pdf does not exist"
+          fi
+
       - name: Prepare distribution folder
         run: |
           mkdir -p dist/RUT
           cp cw/output.pdf dist/RUT/control.pdf
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Publish to GitHub Pages
+        uses: tsunematsu21/actions-publish-gh-pages@v1.0.2
         with:
-          path: dist
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+          dir: dist
+          branch: pages
+          token: ${{ secrets.ACCESS_TOKEN }}
