@@ -1,17 +1,14 @@
-name: Build and publish PDF to RUT branch
-
+name: Build LaTeX document from RUT
 on:
   push:
     branches:
       - RUT
-  workflow_dispatch:
 
 jobs:
-  build:
+  build_latex:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout source
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -26,27 +23,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-lang-cyrillic
 
-      - name: Generate LaTeX in cw directory
-        working-directory: cw
+      - name: Generate LaTeX PDF
+        shell: bash
         run: |
+          cd cw
           python generate_latex.py
           pdflatex -interaction=nonstopmode output.tex
 
-      - name: Commit PDF to RUT branch
+      - name: Prepare dist directory
+        shell: bash
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          mkdir -p dist/RUT
+          cp cw/output.pdf dist/RUT/control.pdf
 
-          git fetch origin pages || true
-          if git show-ref --verify --quiet refs/remotes/origin/pages; then
-            git checkout pages
-          else
-            git checkout --orphan pages
-          fi
-
-          mkdir -p RUT
-          cp cw/output.pdf RUT/control.pdf
-
-          git add -f RUT/control.pdf
-          git commit -m "Update control.pdf from latest build" || echo "No changes to commit"
-          git push origin pages
+      - name: Publish to GitHub Pages
+        uses: tsunematsu21/actions-publish-gh-pages@v1.0.2
+        with:
+          dir: dist
+          branch: pages
+          token: ${{ secrets.ACCESS_TOKEN }}
