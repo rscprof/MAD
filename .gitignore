@@ -7,7 +7,6 @@
 *.log
 exam
 *.nav
-*.pdf
 *.jpg
 *.png
 *.JPG
@@ -21,3 +20,7 @@ exam
 *.sum
 .openapi*
 *.exe
+/*.pdf
+*.fls
+/cw/*.pdf
+/lections/*.pdf
