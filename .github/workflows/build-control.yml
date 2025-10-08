@@ -47,6 +47,6 @@ jobs:
           mkdir -p RUT
           cp cw/output.pdf RUT/control.pdf
 
-          git add RUT/control.pdf
+          git add -f RUT/control.pdf
           git commit -fm "Update control.pdf from latest build" || echo "No changes to commit"
           git push origin pages
