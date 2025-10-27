@@ -21,7 +21,6 @@ def escape_latex(text):
         '%': r'\%',
         '#': r'\#',
         '_': r'\_',
-        '~': r'\textasciitilde{}',
         '^': r'\^{}',
     }
     for k, v in replacements.items():
