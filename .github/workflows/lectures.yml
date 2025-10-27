@@ -4,7 +4,7 @@ name: Build and Deploy Lectures
 
 on:
   push:
-    branches: [ RUT ]  # или другая ветка, откуда запускается сборка
+    branches: [ RUT ]  # или ваша основная ветка
   workflow_dispatch:
 
 jobs:
@@ -15,25 +15,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install LaTeX
+      - name: Install full TeX Live (with XeLaTeX and Cyrillic support)
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+          sudo apt-get install -y texlive-full
 
       - name: Create output directory
         run: mkdir -p RUT/lectures
 
-      - name: Compile LaTeX lectures to PDF
+      - name: Compile .tex files with XeLaTeX
         run: |
-          for texfile in lections/lecture*.tex; do
+          cd lections
+          for texfile in lecture*.tex; do
             if [ -f "$texfile" ]; then
-              filename=$(basename "$texfile" .tex)
-              latexmk -pdf -cd -jobname="$filename" "$texfile"
-              cp "${filename}.pdf" RUT/lectures/
+              filename="${texfile%.tex}"
+              echo "Compiling $texfile → $filename.pdf"
+              # Первый проход
+              xelatex -interaction=nonstopmode "$texfile"
+              # Второй проход (для ссылок, TOC и т.д.)
+              xelatex -interaction=nonstopmode "$texfile"
+              # Копируем PDF в целевую папку
+              mv "${filename}.pdf" ../RUT/lectures/
+              # Опционально: удаляем временные файлы
+              rm -f "${filename}.aux" "${filename}.log" "${filename}.out" "${filename}.toc"
             fi
           done
 
-      - name: Copy TXT files
+      - name: Copy .txt files
         run: |
           cp lections/lecture04_android_coroutines.txt RUT/lectures/
 
