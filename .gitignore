@@ -13,3 +13,5 @@ old
 swagger*/*
 *.fls
 cw/*.tex
+exam/generated_tickets.tex
+exam/exam_document.tex
