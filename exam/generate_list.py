@@ -50,7 +50,6 @@ def escape_latex(text):
         '%': r'\%',
         '#': r'\#',
         '&': r'\&',
-        '~': r'\textasciitilde{}',
         '^': r'\^{}',
     }
     for k, v in replacements.items():
