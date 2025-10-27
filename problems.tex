@@ -1,15 +1,21 @@
 \documentclass{article}
-\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}       % Поддержка кириллицы через T2A
 \usepackage[russian]{babel}
-\usepackage{hyperref}
-\usepackage{amssymb}
-\usepackage[a4paper]{geometry}
-
-\usepackage{listings} % Используем стандартный listings (inputenc не нужен)
+\usepackage[utf8]{inputenc}     % Совместимость с UTF-8 (если компилятор не Lua/XeLaTeX)
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath, amssymb}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
 \usepackage{marvosym}
-\usepackage{amsmath}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    pdftitle={Сборник заданий по разработке мобильных приложений}
+}
 
+% Настройка листингов для Kotlin
+\usepackage{listings}
 \lstdefinelanguage{Kotlin}{
   comment=[l]{//},
   commentstyle={\color{gray}\ttfamily},
@@ -24,18 +30,23 @@
   ndkeywords={@Composable, @Preview, @Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing, Pair, Triple},
   ndkeywordstyle={\color{BurntOrange}\bfseries},
   sensitive=true,
-  stringstyle={\color{ForestGreen}\ttfamily}
+  stringstyle={\color{ForestGreen}\ttfamily},
+  breaklines=true,
+  keepspaces=true,
+  showstringspaces=false,
+  basicstyle=\ttfamily\footnotesize
 }
 
-
+% По умолчанию используем Kotlin (а не Python)
+\lstset{language=Kotlin}
 \lstset{
     inputencoding=utf8,
-    language=Python,
+    language=Kotlin,
     basicstyle=\ttfamily\footnotesize,
     breaklines=true,
     keepspaces=true,
     showstringspaces=false,
-	literate={а}{{\selectfont\char224}}1
+    literate={а}{{\selectfont\char224}}1
              {б}{{\selectfont\char225}}1
              {в}{{\selectfont\char226}}1
              {г}{{\selectfont\char227}}1
@@ -103,30 +114,27 @@
              {Я}{{\selectfont\char223}}1
 }
 
-
 \begin{document}
 
+\thispagestyle{empty}
+\vspace*{\fill}
 {
-    \thispagestyle{empty}
-    \vspace*{\fill}
-    \centering
-
-    \Large Сборник заданий для семинарских занятий \\
-    по курсу \\
-    <<Разработка мобильных приложений>> \\
-    \large
-    \vspace{40pt}
-    \vspace*{\fill}
-    \newpage
+\centering
+\Large Сборник заданий для семинарских занятий \\
+по курсу \\
+<<Разработка мобильных приложений>> \\
+\large
+\vspace{40pt}
+\vspace*{\fill}
 }
+\newpage
 
 \tableofcontents
 \newpage
 
 \section{Общие сведения}
 
-Сборник содержит задания для семинарских занятий по курсу <<Разработка мобильных приложений>>.
-
+Сборник содержит задания для семинарских занятий по курсу <<Разработка мобильных приложений>>.  
 Задачник рассчитан на 48 часов семинарских занятий.
 
 Структурно курс делится на две части:
@@ -137,7 +145,7 @@
 
 В практических и лабораторных работах предполагается использование языка Kotlin в средах
 IntelliJ IDEA и Android Studio. При этом необходимо соблюдать
-\href{https://kotlinlang.org/docs/reference/coding-conventions.html}{Coding Conventions} (требования к стилю кода).
+\href{https://kotlinlang.org/docs/coding-conventions.html}{Coding Conventions} (требования к стилю кода).
 
 Перед сдачей работы добейтесь, чтобы среда не выдавала предупреждений
 при запуске подпункта \textbf{Inspect Code} пункта меню \textbf{Analyze}.
@@ -153,68 +161,47 @@ IntelliJ IDEA и Android Studio. При этом необходимо соблю
 \section{Язык Kotlin}
 
 \include{problem_kotlin_start.tex}
-%\include{problems_kotlin_array.tex}
-%\include{problem_kotlin_string.tex}
-
 \include{problem_kotlin_functions.tex}
-
 \include{problem_kotlin_when.tex}
-
 \include{problem_kotlin_functional_programming.tex}
-
 \include{problem_kotlin_when_two.tex}
-
 \include{problem_kotlin_oop.tex}
 \include{problem_kotlin_delegate.tex}
-
 \include{problem_kotlin_coroutine.tex}
 
-% Следующая практика 411 - посложнее, 412 - попроще
+\section{Разработка на платформе Android}
 
 \include{problem_android_first.tex}
 \include{problem_android_autotest.tex}
+\include{problem_android_lazylist.tex}
+\include{problem_android_DI.tex}
+\include{problem_android_rest.tex}
 
-% \include{problem_kotlin_operators_overloading.tex}
-% \include{problem_kotlin_generic.tex}
+\subsection{Последние семинары (две недели)}
 
-% %\include{problem_kotlin_dagger.tex}
+Последние семинары предназначены для подведения итогов: сдачи всех работ, проведения
+финального опроса и подведения итогов курса.
 
-% \section{Разработка на языке Kotlin для платформы Android}
+\section{Проекты как замена заданиям семинаров}
 
-% \include{lab_android_first.tex}
-% \include{problem_android_first.tex}
-% %\include{problem_android_first_compose.tex}
-% \include{problem_android_background.tex}
+Студент по согласованию с преподавателем может реализовывать мобильное приложение,
+являющееся крупным проектом (его объём должен быть не меньше суммарного объёма заданий
+семинаров).
 
-% %\include{problem_android_lazylist.tex}
-% %\include{problem_android_photo.tex}
-% %\include{lab_android_sensors.tex}
-% %\include{problem_android_sensors.tex}
-% %\include{problem_android_animation.tex}
-% %\include{lab_android_profile.tex}
-% %\include{problem_android_optimize.tex}
+Проект может реализовываться на Android (Kotlin), iOS (Swift) или Flutter (Dart).
 
-% \include{problem_android_room.tex}
-
-% \include{problem_android_rest.tex}
-
-% \include{problem_android_autotest.tex}
-
-% \include{problem_android_mvvm.tex}
-% \include{problem_android_repository.tex}
-% \include{problem_android_DI.tex}
-
-% \subsection{Последний семинар}
-
-% Последнее занятие предназначено для подведения итогов, осуществления review кода последнего проекта, который, в идеале, включает корректное использование паттерна
-% MVVM, репозитория и Dependency Injection в проекте, использующем REST API и кеширование результатов на стороне клиента.
+В ходе реализации проекта нужно использовать следующие принципы:
+покрытие unit- и UI-тестами, принципы Clean Architecture, MVVM, DI с использованием стандартных библиотек,
+SOLID, функциональный подход в программировании.
+Код должен соответствовать стандартам кодирования, принятым в крупных организациях,
+занимающихся разработкой программного обеспечения.
 
 \section{Список литературы}
 
 \begin{enumerate}
-    \item Официальная документация по языку Kotlin: \url{https://kotlinlang.org/docs/reference/}
+    \item Официальная документация по языку Kotlin: \url{https://kotlinlang.org/docs/}
     \item Официальная документация по платформе Android: \url{https://developer.android.com/docs}
-    \item Быстрое введение в Kotlin от авторов языка: \url{https://stepik.org/course/4222/promo}
+    \item Быстрое введение в Kotlin от авторов языка: \url{https://stepik.org/course/4222}
 \end{enumerate}
 
 \end{document}
