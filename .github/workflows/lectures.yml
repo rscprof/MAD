@@ -1,0 +1,45 @@
+# .github/workflows/lectures.yml
+
+name: Build and Deploy Lectures
+
+on:
+  push:
+    branches: [ RUT ]  # или другая ветка, откуда запускается сборка
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+
+      - name: Create output directory
+        run: mkdir -p RUT/lectures
+
+      - name: Compile LaTeX lectures to PDF
+        run: |
+          for texfile in lections/lecture*.tex; do
+            if [ -f "$texfile" ]; then
+              filename=$(basename "$texfile" .tex)
+              latexmk -pdf -cd -jobname="$filename" "$texfile"
+              cp "${filename}.pdf" RUT/lectures/
+            fi
+          done
+
+      - name: Copy TXT files
+        run: |
+          cp lections/lecture04_android_coroutines.txt RUT/lectures/
+
+      - name: Deploy to pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./RUT
+          publish_branch: pages
