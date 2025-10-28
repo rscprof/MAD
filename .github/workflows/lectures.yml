@@ -18,7 +18,13 @@ jobs:
       - name: Install full TeX Live (with XeLaTeX and Cyrillic support)
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full
+          sudo apt-get install -y \
+            texlive-xetex \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-lang-cyrillic \
+            fonts-dejavu fonts-freefont-otf fonts-freefont-ttf
 
       - name: Create output directory
         run: mkdir -p RUT/lectures
