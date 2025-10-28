@@ -1,0 +1,48 @@
+- что такое корутина
+- suspend-функции
+implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+- coroutines builders (launch, async, withContext, coroutineScope, )
+- coroutines scope (withContext)
+- runBlocking
+- delay
+- suspend main
+- типы диспетчеров
+- coroutineScope {
+
+}
+- атомики
+- GlobalScope
+- cancel, cancelAndJoin, аккуратность с исключениями
+- yield, ensureActive, isActive
+- withContext(NonCancellable)
+- withTimeout(1300L)
+- async(start = CoroutineStart.LAZY)
+- контексты (newSingleThreadContext("MyOwnThread"))
+- Dispatchers.Unconfined
+
+- Flow (cold -- пока не запросим не работает, работает в контексте вызывающего) / emit
+- .collect
+- flowOf; .asFlow
+- работают map, filter и другие вещи, что мы любим
+- transform (можно выдавать больше или меньше значений за счет контроля emit)
+- flowOn
+- .buffer() - чтобы не ожидалось collect
+- conflate() - интересует только последнее значение, а не все
+- collectLatest() - запуск последнего с cancel предыдущего
+- combine() - связывание последних значений, а не ожидание пары
+- onEach()
+- flatMapConcat,  flattenConcat, flatMapMerge, flatMapLatest, 
+- try - catch c flow
+- .catch
+- .onCompletion {} (альтернатива finally)
+- .collect или .lauchIn() //запуск в другой корутине
+- .cancelable()
+- Channel (send/receive) |размер буфера|
+- produce фабрика Channel
+- consumeEach
+- можно делать много продюсеров/консюмеров
+- ticker channel - тики делаем
+- Mutex
+- SharedFlow
+- StateFlow
+
