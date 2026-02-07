@@ -1,7 +1,90 @@
-\subsection{Лабораторная работа <<UI-тестирование и Rest API>> }
+\subsection{Лабораторная работа <<UI-тестирование и работа с Rest API>> (2 недели)}
 
-Осуществите полное UI-тестирование приложения, полученного в прошлой работе.
+\textbf{Цель работы:} Реализовать Android-приложение с чистой архитектурой и UNIT- и UI-тестами, 
+реализующего доступ к публичному сервису посредством REST API.
 
-Осуществите подключение к REST API сервису, полученному в первой работе по предмету
-<<Архитектура веб- и мобильных приложений>>, и обеспечьте выполнение всех операций 
-приложения с его использованием (создайте новый репозиторий и используйте HILT).
+\begin{itemize}
+    \item Приложение должно быть реализовано в соответствии 
+    с принципами \textbf{чистой архитектуры} (Clean Architecture) 
+    и использовать паттерн \textbf{MVVM}.
+    \item Для внедрения зависимостей обязателен \textbf{Hilt}.
+    \item Для сетевых запросов используется библиотека 
+    \textbf{Retrofit} (в фоне, через \texttt{Coroutine}).
+    \item Все сетевые ответы должны \textbf{кешироваться локально} 
+    (с помощью Room), чтобы обеспечивать работу 
+    приложения при отсутствии интернет-соединения.
+    \item Обязательна реализация как \textbf{Unit-тестов} 
+    (для Repository, UseCase и т.д.), так и 
+    \textbf{UI-тестов}.
+    \item Используйте Navigation для переходов между экранами.
+\end{itemize}
+
+\paragraph{Важные примечания}
+\begin{itemize}
+    \item Перед началом работы проверьте работоспособность выбранного API.
+    \item Если выбранный API оказался неработоспособен, замените его на другой из списка ниже. 
+    Сайты-заменители у разных студентов не должны совпадать.
+    \item Для всех запросов к публичным API \textbf{обязательно указывайте заголовок} 
+    \texttt{User-Agent: YourAppName/1.0} (требование многих сервисов).
+    \item Все варианты содержат как минимум один параметризованный запрос и подходят для кеширования.
+\end{itemize}
+
+\paragraph{Задания}
+
+Реализуйте клиент для \textbf{одного} из следующих REST API. Каждое задание предполагает:
+\begin{itemize}
+    \item наличие хотя бы одного параметризованного запроса;
+    \item отображение результата в UI;
+    \item сохранение истории или кэша для офлайн-доступа.
+\end{itemize}
+
+\begin{enumerate}
+    \item \textbf{Open-Meteo Weather API} — прогноз погоды (температура, осадки) по координатам. \\
+    \url{https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&hourly=temperature_2m}
+
+    \item \textbf{TVMaze API} — поиск телешоу по названию (\texttt{GET /search/shows?q=sherlock}). \\
+    \url{https://api.tvmaze.com/search/shows?q=sherlock}
+
+    \item \textbf{Open Trivia Database} — вопросы для викторины по категории и сложности 
+    (\texttt{GET /api.php?amount=5\&category=9\&difficulty=easy}). \\
+    \url{https://opentdb.com/api.php?amount=5&category=9&difficulty=easy}
+
+    \item \textbf{BoredAPI} — получение предложения занятия по типу и числу участников 
+    (\texttt{GET /activity?type=education\&participants=1}). \\
+    \url{https://www.boredapi.com/api/activity?type=education&participants=1}
+
+    \item \textbf{Open Library API} — поиск книг по ключевому слову (\texttt{GET /search.json?q=python}). \\
+    \url{https://openlibrary.org/search.json?q=python}
+
+    \item \textbf{Open Library API} — список произведений по имени автора 
+    (\texttt{GET /search/authors.json?q=tolkien}). \\
+    \url{https://openlibrary.org/search/authors.json?q=tolkien}
+
+    \item \textbf{JokeAPI} — получение шутки по категории (\texttt{GET /joke/Programming?type=single}). \\
+    \url{https://v2.jokeapi.dev/joke/Programming?type=single}
+
+    \item \textbf{Random User API} — генерация случайного профиля пользователя с параметрами 
+    (\texttt{GET /?nat=RU\&gender=female}). \\
+    \url{https://randomuser.me/api/?nat=RU&gender=female}
+
+    \item \textbf{PokéAPI} — получение данных о покемоне по имени или идентификатору 
+    (\texttt{GET /pokemon/\{name\}}). \\
+    \url{https://pokeapi.co/api/v2/pokemon/pikachu}
+
+    \item \textbf{Advice Slip API} — поиск жизненных советов по ключевому слову 
+    (\texttt{GET /advice/search/\{query\}}). \\
+    \url{https://api.adviceslip.com/advice/search/love} \\
+    \textit{Примечание: обязательно указывать заголовок \texttt{User-Agent}.}
+
+    \item \textbf{TheMealDB} — поиск рецептов по ингредиенту, названию или категории 
+    (\texttt{GET /filter.php?i=chicken\_breast}). \\
+    \url{https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast}
+
+    \item \textbf{DictionaryAPI} — получение определений английского слова 
+    (\texttt{GET /entries/en/\{word\}}). \\
+    \url{https://api.dictionaryapi.dev/api/v2/entries/en/hello}
+
+    \item \textbf{ExchangeRate-API} — курсы валют относительно базовой валюты 
+    (\texttt{GET /latest/\{currency\}}). \\
+    \url{https://open.er-api.com/v6/latest/USD}
+\end{enumerate}
