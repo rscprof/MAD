@@ -63,7 +63,7 @@ jobs:
           mkdir -p dist/RUT
           cp cw/output.pdf dist/RUT/control.pdf
 
-      - name: Publish to GitHub Pages
+      - name: Publish generated content to GitHub Pages
         uses: tsunematsu21/actions-publish-gh-pages@v1.0.2
         with:
           dir: dist
