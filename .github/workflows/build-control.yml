@@ -1,4 +1,4 @@
-name: Build and Publish LaTeX Document
+name: Build first control
 
 on:
   push:
